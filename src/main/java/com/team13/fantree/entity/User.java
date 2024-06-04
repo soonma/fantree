@@ -10,9 +10,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "users")
 public class User extends Timestamped{
@@ -37,5 +39,7 @@ public class User extends Timestamped{
     private String refreshToken;
 
     private String statusUpdate;
+
+
 
 }
