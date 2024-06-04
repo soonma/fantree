@@ -2,7 +2,7 @@ package com.team13.fantree.entity;
 
 public enum UserStatusEnum {
     USER(Status.USER),
-    NONEUSER(Status.NONEUSER);
+    NON_USER(Status.NON_USER);
 
     private final String status;
 
@@ -16,6 +16,6 @@ public enum UserStatusEnum {
 
     public static class Status {
         public static final String USER = "USER";
-        public static final String NONEUSER = "NONEUSER";
+        public static final String NON_USER = "NON_USER";
     }
 }
