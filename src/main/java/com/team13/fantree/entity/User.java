@@ -1,6 +1,7 @@
 package com.team13.fantree.entity;
 
 
+import com.team13.fantree.dto.ProfileRequestDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -37,5 +38,16 @@ public class User extends Timestamped{
     private String refreshToken;
 
     private String statusUpdate;
+
+    public void update(ProfileRequestDto requestDto) {
+        this.name = requestDto.getName();
+        this.email = requestDto.getEmail();
+        this.headline = requestDto.getHeadline();
+        this.password = requestDto.getPassword();
+    }
+
+    public void passwordUpdate(String password) {
+        this.password = password;
+    }
 
 }
