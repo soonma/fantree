@@ -20,8 +20,9 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity signUp(@Valid @RequestBody SignUpRequestDto requestDto) {
-        return null;
+    public ResponseEntity<String> signUp(@Valid @RequestBody SignUpRequestDto requestDto) {
+        userService.signup(requestDto);
+        return ResponseEntity.status(201).body("회원가입에 성공했습니다.");
     }
 
     @PostMapping("/login")
@@ -30,8 +31,9 @@ public class UserController {
     }
 
     @PutMapping("/withDraw/{id}")
-    public ResponseEntity withDraw(@PathVariable Long id) {
-        return null;
+    public ResponseEntity<String> withDraw(@PathVariable Long id, String password) {
+        userService.withDraw(id, password);
+        return ResponseEntity.status(201).body("회원탈퇴에 성공했습니다.");
     }
 
     @PutMapping("/logout/{id}")
