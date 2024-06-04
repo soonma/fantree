@@ -1,18 +1,38 @@
 package com.team13.fantree.service;
 
+
 import com.team13.fantree.dto.PasswordRequestDto;
 import com.team13.fantree.dto.ProfileRequestDto;
 import com.team13.fantree.dto.ProfileResponseDto;
 import com.team13.fantree.entity.User;
 import com.team13.fantree.exception.DataNotFoundException;
+
+import com.team13.fantree.dto.SignUpRequestDto;
+import com.team13.fantree.entity.User;
+import com.team13.fantree.entity.UserStatusEnum;
+
 import com.team13.fantree.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.team13.fantree.dto.LoginRequestDto;
+
+
+=======
+
+
+
+import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
 
     private final UserRepository userRepository;
 
@@ -53,10 +73,64 @@ public class UserService {
         return userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException("해당 Id에 맞는 프로필을 찾을 수 없습니다."));
     }
 
-    private boolean isValidPasswordFormat(String password) {
-        // 최소 10글자 이상, 대소문자 포함 영문 + 숫자 + 특수문자를 최소 1글자씩 포함하는 정규식
+    
+
+
+  
+
+    public void signup(SignUpRequestDto requestDto){
+        String username = requestDto.getUsername();
+
+        if(!isValidUsername(requestDto.getUsername())){
+            throw new IllegalArgumentException("ID 형식이 올바르지 않습니다.");
+        }
+
+        if (userRepository.findByUsername(username).isPresent()){
+            throw new IllegalArgumentException("중복된 회원입니다.");
+        }
+
+//        if(!isValidPasswordFormat(requestDto.getPassword())){
+//            throw new IllegalArgumentException("비밀번호 형식이 올바르지 않습니다.");
+//        }
+
+        User user = new User(requestDto);
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void withDraw(Long id, String password){
+        User user = userRepository.findById(id).get();
+        if(!password.equals(user.getPassword())){
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+        if(user.getStatus().equals(UserStatusEnum.NON_USER)){
+            throw new IllegalArgumentException("이미 탈퇴한 회원입니다.");
+        }
+        user.withDraw();
+    }
+
+    private boolean isValidPasswordFormat(String password){
         String passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=[\\]{};':\"\\\\|,.<>/?]).{10,}$";
         return password.matches(passwordPattern);
     }
 
+
+    private boolean isValidUsername(String username){
+        String usernamePattern = "^[a-zA-Z0-9_-]{10,20}$";
+        return username.matches(usernamePattern);
+    }
+
+	public boolean login(LoginRequestDto requestDto) {
+		User findUser = userRepository.findByUsername(requestDto.getUsername()).get();
+		if (findUser == null || !findUser.getPassword().equals(requestDto.getPassword()))
+			return false;
+		return true;
+	}
+
+	@Transactional
+	public boolean logout(Long id) {
+		this.id = id;
+		User user = userRepository.findById(id).get();
+		return user.logout();
+	}
 }

@@ -1,16 +1,17 @@
 package com.team13.fantree.entity;
 
 
+
 import com.team13.fantree.dto.ProfileRequestDto;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.team13.fantree.dto.SignUpRequestDto;
+
+import jakarta.persistence.*;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter
@@ -22,12 +23,14 @@ public class User extends Timestamped{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(nullable = false, unique = true)
     private String username;
 
     private String password;
 
     private String name;
 
+    @Column(nullable = false, unique = true)
     private String email;
 
     private String headline;
@@ -39,6 +42,17 @@ public class User extends Timestamped{
 
     private String statusUpdate;
 
+
+
+    public User(SignUpRequestDto requestDto) {
+        this.username = requestDto.getUsername();
+        this.password = requestDto.getPassword();
+        this.name = requestDto.getName();
+        this.email = requestDto.getEmail();
+        this.headline = requestDto.getHeadline();
+        this.status = UserStatusEnum.USER;
+    }
+      
     public void update(ProfileRequestDto requestDto) {
         this.name = requestDto.getName();
         this.email = requestDto.getEmail();
@@ -48,6 +62,18 @@ public class User extends Timestamped{
 
     public void passwordUpdate(String password) {
         this.password = password;
+    }
+
+    public void withDraw(){
+        this.status = UserStatusEnum.NON_USER;
+        this.statusUpdate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
+    }
+
+
+    public boolean logout() {
+        refreshToken = null;
+        return refreshToken==null? true: false;
+
     }
 
 }
