@@ -4,9 +4,12 @@ import com.team13.fantree.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import com.team13.fantree.repository.PostRepository;
+
 @Service
 @RequiredArgsConstructor
 public class PostService {
 
-    PostRepository postRepository;
+	private final PostRepository postRepository;
+
 }

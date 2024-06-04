@@ -38,6 +38,7 @@ public class User extends Timestamped{
 
     private String statusUpdate;
 
+
     public User(SignUpRequestDto requestDto) {
         this.username = requestDto.getUsername();
         this.password = requestDto.getPassword();
@@ -51,6 +52,12 @@ public class User extends Timestamped{
     public void withDraw(){
         this.status = UserStatusEnum.NON_USER;
         this.statusUpdate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
+    }
+
+
+    public boolean logout() {
+        refreshToken = null;
+        return refreshToken==null? true: false;
     }
 
 }
