@@ -1,6 +1,7 @@
 package com.team13.fantree.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.team13.fantree.dto.LoginRequestDto;
 import com.team13.fantree.entity.User;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 
 	private final UserRepository userRepository;
+	private Long id;
 
 	public boolean login(LoginRequestDto requestDto) {
 		User findUser = userRepository.findByUsername(requestDto.getUsername()).get();
@@ -21,4 +23,10 @@ public class UserService {
 		return true;
 	}
 
+	@Transactional
+	public boolean logout(Long id) {
+		this.id = id;
+		User user = userRepository.findById(id).get();
+		return user.logout();
+	}
 }

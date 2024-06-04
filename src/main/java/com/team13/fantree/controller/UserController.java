@@ -40,7 +40,9 @@ public class UserController {
 
 	@PutMapping("/logout/{id}")
 	public ResponseEntity logout(@PathVariable Long id) {
-		return null;
+		boolean logout = userService.logout(id);
+		return new ResponseEntity(logout ? "로그아웃 성공" : "로그아웃 실패",
+			logout ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
 	}
 
 	@PutMapping("/profile/{id}")

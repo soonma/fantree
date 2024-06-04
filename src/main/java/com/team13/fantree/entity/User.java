@@ -38,4 +38,8 @@ public class User extends Timestamped{
 
     private String statusUpdate;
 
+    public boolean logout() {
+        refreshToken = null;
+        return refreshToken==null? true: false;
+    }
 }
