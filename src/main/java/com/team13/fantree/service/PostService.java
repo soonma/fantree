@@ -32,7 +32,7 @@ public class PostService {
     }
 
     public List<PostResponseDto> findAllPosts() {
-        List<Post> posts = postRepository.findAll();
+        List<Post> posts = postRepository.findAllByOrderByCreateAtDesc();
 
         if(posts.isEmpty()){
             return null;
