@@ -24,7 +24,6 @@ public class UserService {
 
 	@Transactional
 	public boolean logout(Long id) {
-		this.id = id;
 		User user = userRepository.findById(id).get();
 		return user.logout();
 	}
