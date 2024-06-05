@@ -9,7 +9,6 @@ import com.team13.fantree.entity.User;
 import com.team13.fantree.exception.DataNotFoundException;
 
 import com.team13.fantree.dto.SignUpRequestDto;
-import com.team13.fantree.entity.User;
 import com.team13.fantree.entity.UserStatusEnum;
 
 import com.team13.fantree.repository.UserRepository;
@@ -20,6 +19,9 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 import com.team13.fantree.dto.LoginRequestDto;
+
+
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
