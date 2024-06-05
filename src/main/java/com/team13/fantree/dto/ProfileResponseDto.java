@@ -17,4 +17,9 @@ public class ProfileResponseDto {
         this.email = user.getEmail();
         this.headline = user.getHeadline();
     }
+
+    public static ProfileResponseDto toDto(User user) {
+        return new ProfileResponseDto(user);
+    }
+
 }
