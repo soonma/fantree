@@ -29,7 +29,6 @@ public class PostService {
     public PostResponseDto createPost(PostRequestDto requestDto) {
         //임시 테스트  나중에 주석 처리 할 예정
         User user = userRepository.findById(1L).get();
-
         Post post = new Post(requestDto,user);
 
         postRepository.save(post);
@@ -38,13 +37,7 @@ public class PostService {
 
     public List<PostResponseDto> findAllPosts() {
         List<Post> posts = postRepository.findAllByOrderByCreateAtDesc();
-
-        if(posts.isEmpty()){
-            return null;
-        } else {
             return findContent(posts);
-        }
-
     }
 
     public PostResponseDto findPostById(long id) {
