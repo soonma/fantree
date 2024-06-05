@@ -9,12 +9,14 @@ import jakarta.persistence.*;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "users")
 public class User extends Timestamped{
@@ -41,6 +43,7 @@ public class User extends Timestamped{
     private String refreshToken;
 
     private String statusUpdate;
+
 
 
 
@@ -73,7 +76,6 @@ public class User extends Timestamped{
     public boolean logout() {
         refreshToken = null;
         return refreshToken==null? true: false;
-
     }
 
 }
