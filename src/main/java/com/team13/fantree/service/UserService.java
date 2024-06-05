@@ -10,6 +10,8 @@ import com.team13.fantree.dto.SignUpRequestDto;
 import com.team13.fantree.entity.User;
 import com.team13.fantree.entity.UserStatusEnum;
 import com.team13.fantree.exception.DataNotFoundException;
+import com.team13.fantree.exception.NotFoundException;
+import com.team13.fantree.exception.UserErrorCode;
 import com.team13.fantree.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -100,15 +102,19 @@ public class UserService {
 	}
 
 	public boolean login(LoginRequestDto requestDto) {
-		User findUser = userRepository.findByUsername(requestDto.getUsername()).get();
-		if (findUser == null || !findUser.getPassword().equals(requestDto.getPassword()))
-			return false;
+		User findUser = userRepository.findByUsername(requestDto.getUsername()).orElseThrow(
+			() -> new NotFoundException(UserErrorCode.USER_NOT_FOUND)
+		);
+		if (!findUser.getPassword().equals(requestDto.getPassword()))
+			throw new NotFoundException(UserErrorCode.USER_NOT_FOUND);
 		return true;
 	}
 
 	@Transactional
 	public boolean logout(Long id) {
-		User user = userRepository.findById(id).get();
+		User user = userRepository.findById(id).orElseThrow(
+			() -> new NotFoundException(UserErrorCode.USER_NOT_FOUND)
+		);
 		return user.logout();
 	}
 

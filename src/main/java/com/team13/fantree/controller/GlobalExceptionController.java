@@ -12,6 +12,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.team13.fantree.exception.CommonErrorCode;
 import com.team13.fantree.exception.ErrorCode;
 import com.team13.fantree.exception.ErrorResponse;
+import com.team13.fantree.exception.MismatchException;
+import com.team13.fantree.exception.NotFoundException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,6 +26,18 @@ public class GlobalExceptionController extends ResponseEntityExceptionHandler {
 		log.warn("handleAllException", ex);
 		ErrorCode errorCode = CommonErrorCode.INTERNAL_SERVER_ERROR;
 		return handleExceptionInternal(errorCode, ex.getMessage());
+	}
+
+	@ExceptionHandler(NotFoundException.class)
+	public ResponseEntity<Object> handleCustomException(NotFoundException e) {
+		ErrorCode errorCode = e.getErrorCode();
+		return handleExceptionInternal(errorCode);
+	}
+
+	@ExceptionHandler(MismatchException.class)
+	public ResponseEntity<Object> handleCustomException(MismatchException e) {
+		ErrorCode errorCode = e.getErrorCode();
+		return handleExceptionInternal(errorCode);
 	}
 
 	private ResponseEntity<Object> handleExceptionInternal(ErrorCode errorCode) {
