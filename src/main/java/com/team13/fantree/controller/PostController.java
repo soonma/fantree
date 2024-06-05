@@ -19,7 +19,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/post")
+@RequestMapping("/posts")
 public class PostController {
     private final PostService postService;
 
@@ -52,12 +52,13 @@ public class PostController {
 
     @PutMapping("/{id}")
     public ResponseEntity updatePost(@PathVariable long id, @RequestBody PostRequestDto requestDto) {
-
-        return ResponseEntity.status(200).body(postService.updatePost(id,requestDto));
+        postService.updatePost(id,requestDto);
+        return ResponseEntity.status(200).body("Post updated");
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deletePost(@PathVariable long id) {
-        return ResponseEntity.status(200).body(postService.deletePost(id));
+        postService.deletePost(id);
+        return ResponseEntity.status(200).body("Post deleted");
     }
 }
