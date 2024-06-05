@@ -1,16 +1,22 @@
 package com.team13.fantree.entity;
 
 
+
+import com.team13.fantree.dto.ProfileRequestDto;
 import com.team13.fantree.dto.SignUpRequestDto;
+
 import jakarta.persistence.*;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "users")
 public class User extends Timestamped{
@@ -39,6 +45,8 @@ public class User extends Timestamped{
     private String statusUpdate;
 
 
+
+
     public User(SignUpRequestDto requestDto) {
         this.username = requestDto.getUsername();
         this.password = requestDto.getPassword();
@@ -47,7 +55,17 @@ public class User extends Timestamped{
         this.headline = requestDto.getHeadline();
         this.status = UserStatusEnum.USER;
     }
+      
+    public void update(ProfileRequestDto requestDto) {
+        this.name = requestDto.getName();
+        this.email = requestDto.getEmail();
+        this.headline = requestDto.getHeadline();
+        this.password = requestDto.getPassword();
+    }
 
+    public void passwordUpdate(String password) {
+        this.password = password;
+    }
 
     public void withDraw(){
         this.status = UserStatusEnum.NON_USER;

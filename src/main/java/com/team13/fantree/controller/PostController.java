@@ -1,6 +1,8 @@
 package com.team13.fantree.controller;
 
 import com.team13.fantree.dto.PostRequestDto;
+import com.team13.fantree.dto.PostResponseDto;
+import com.team13.fantree.entity.Post;
 import com.team13.fantree.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/post")
@@ -21,26 +25,39 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity createPost(@RequestBody PostRequestDto requestDto) {
-        return null;
+        postService.createPost(requestDto);
+        return ResponseEntity.ok().body("Post created");
     }
 
     @GetMapping
     public ResponseEntity findAllPosts() {
-        return null;
+        List<PostResponseDto> responseDtos = postService.findAllPosts();
+
+        if (responseDtos.isEmpty()) {
+            return ResponseEntity.status(200).body("먼저 작성하여 소식을 알려보세요!");
+        } else {
+            return ResponseEntity.status(200).body(postService.findAllPosts());
+        }
     }
 
     @GetMapping("/{id}")
     public ResponseEntity findPostById(@PathVariable Long id) {
-        return null;
+        PostResponseDto ResponseDto = postService.findPostById(id);
+        if (ResponseDto == null) {
+            return ResponseEntity.status(404).body("Post not found");
+        } else {
+            return ResponseEntity.status(200).body(ResponseDto);
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updatePost(@PathVariable Long id, @RequestBody PostRequestDto requestDto) {
-        return null;
+    public ResponseEntity updatePost(@PathVariable long id, @RequestBody PostRequestDto requestDto) {
+
+        return ResponseEntity.status(200).body(postService.updatePost(id,requestDto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deletePost(@PathVariable Long id) {
-        return null;
+    public ResponseEntity deletePost(@PathVariable long id) {
+        return ResponseEntity.status(200).body(postService.deletePost(id));
     }
 }

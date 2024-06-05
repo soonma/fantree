@@ -1,6 +1,7 @@
 package com.team13.fantree.dto;
 
 import com.team13.fantree.entity.Post;
+import com.team13.fantree.entity.User;
 import lombok.Getter;
 
 @Getter
@@ -15,5 +16,9 @@ public class PostResponseDto {
         this.content = post.getContent();
         this.createAt = post.getCreateAt();
         this.modifiedAt = post.getModifiedAt();
+    }
+
+    public static ProfileResponseDto toDto(User user) {
+        return new ProfileResponseDto(user);
     }
 }
