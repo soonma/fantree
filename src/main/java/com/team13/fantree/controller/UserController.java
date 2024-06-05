@@ -40,7 +40,6 @@ public class UserController {
 	public ResponseEntity logout(@PathVariable Long id) {
 		userService.logout(id);
 		return ResponseEntity.ok().body("로그아웃 성공");
-
 	}
 
     @PatchMapping("/users/{id}")

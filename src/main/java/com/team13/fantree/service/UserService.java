@@ -56,10 +56,10 @@ public class UserService {
     public void withDraw(Long id, String password){
         User user = findById(id);
         if(!password.equals(user.getPassword())){
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new NotFoundException(UserErrorCode.PW_MISMATCH);
         }
         if(user.getStatus().equals(UserStatusEnum.NON_USER)){
-            throw new IllegalArgumentException("이미 탈퇴한 회원입니다.");
+            throw new NotFoundException(UserErrorCode.WITHDRAW_USER);
         }
         user.withDraw();
     }
