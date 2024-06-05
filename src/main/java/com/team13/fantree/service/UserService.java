@@ -13,6 +13,7 @@ import com.team13.fantree.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.team13.fantree.dto.LoginRequestDto;
 
@@ -21,6 +22,7 @@ import com.team13.fantree.dto.LoginRequestDto;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public boolean login(LoginRequestDto requestDto) {
         User findUser = userRepository.findByUsername(requestDto.getUsername()).orElseThrow(

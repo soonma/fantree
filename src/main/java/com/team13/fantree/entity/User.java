@@ -44,9 +44,6 @@ public class User extends Timestamped{
 
     private String statusUpdate;
 
-
-
-
     public User(SignUpRequestDto requestDto) {
         this.username = requestDto.getUsername();
         this.password = requestDto.getPassword();
