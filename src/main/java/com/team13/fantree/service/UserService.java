@@ -1,6 +1,7 @@
 package com.team13.fantree.service;
 
 
+
 import com.team13.fantree.dto.PasswordRequestDto;
 import com.team13.fantree.dto.ProfileRequestDto;
 import com.team13.fantree.dto.ProfileResponseDto;
@@ -13,6 +14,7 @@ import com.team13.fantree.entity.UserStatusEnum;
 
 import com.team13.fantree.repository.UserRepository;
 import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
 
 
@@ -22,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.team13.fantree.dto.LoginRequestDto;
 
 
-=======
 
 
 
@@ -32,6 +33,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
 
 
     private final UserRepository userRepository;
@@ -73,10 +75,6 @@ public class UserService {
         return userRepository.findById(userId).orElseThrow(() -> new DataNotFoundException("해당 Id에 맞는 프로필을 찾을 수 없습니다."));
     }
 
-    
-
-
-  
 
     public void signup(SignUpRequestDto requestDto){
         String username = requestDto.getUsername();
@@ -133,4 +131,5 @@ public class UserService {
 		User user = userRepository.findById(id).get();
 		return user.logout();
 	}
+
 }
