@@ -36,7 +36,7 @@ public class UserController {
 		return ResponseEntity.ok().body("로그인 성공");
 	}
 
-    @PutMapping("/withDraw/{id}")
+    @PutMapping("/users/{id}")
     public ResponseEntity<String> withDraw(@PathVariable Long id, String password) {
         userService.withDraw(id, password);
         return ResponseEntity.status(201).body("회원탈퇴에 성공했습니다.");
@@ -49,20 +49,20 @@ public class UserController {
 
 	}
 
-    @PatchMapping("/profile/{userId}")
-    public ResponseEntity<ProfileResponseDto> profileUpdate(@PathVariable Long userId, @RequestBody ProfileRequestDto requestDto){
-        return ResponseEntity.ok().body(userService.update(userId, requestDto));
+    @PatchMapping("/users/{id}")
+    public ResponseEntity<ProfileResponseDto> profileUpdate(@PathVariable Long id, @RequestBody ProfileRequestDto requestDto){
+        return ResponseEntity.ok().body(userService.update(id, requestDto));
     }
 
-    @PutMapping("/profile/{userId}")
-    public ResponseEntity<String> passwordUpdate(@PathVariable Long userId, @Valid @RequestBody PasswordRequestDto requestDto) {
-        userService.passwordUpdate(userId, requestDto);
+    @PutMapping("/users/{id}")
+    public ResponseEntity<String> passwordUpdate(@PathVariable Long id, @Valid @RequestBody PasswordRequestDto requestDto) {
+        userService.passwordUpdate(id, requestDto);
         return ResponseEntity.ok().body("비밀번호가 변경되었습니다.");
     }
 
-    @GetMapping("/profile/{userId}")
-    public ResponseEntity<ProfileResponseDto> getProfile(@PathVariable Long userId) {
-        return ResponseEntity.ok().body(userService.findById(userId));
+    @GetMapping("/users/{id}")
+    public ResponseEntity<ProfileResponseDto> getProfile(@PathVariable Long id) {
+        return ResponseEntity.ok().body(userService.findById(id));
     }
 
 }
