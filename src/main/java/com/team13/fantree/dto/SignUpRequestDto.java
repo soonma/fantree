@@ -8,9 +8,9 @@ import lombok.Getter;
 
 @Getter
 public class SignUpRequestDto {
-    @NotBlank
-    @Pattern(regexp = "\"^[a-zA-Z0-9_-]{10,20}$\"",
-            message = "ID 형식이 올바르지 않습니다.")
+//    @NotBlank
+//    @Pattern(regexp = "\"^[a-zA-Z0-9_-]{10,20}$\"",
+//            message = "ID 형식이 올바르지 않습니다.")
     private String username;
 
     @NotBlank

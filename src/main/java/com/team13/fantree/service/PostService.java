@@ -57,7 +57,6 @@ public class PostService {
         );
         post.setContent(requestDto.getContent());
         postRepository.save(post);
-
         return "저장 성공했습니다.";
     }
 
