@@ -5,6 +5,8 @@ import com.team13.fantree.dto.PostRequestDto;
 import com.team13.fantree.dto.PostResponseDto;
 import com.team13.fantree.entity.Post;
 import com.team13.fantree.entity.User;
+import com.team13.fantree.exception.NotFoundException;
+import com.team13.fantree.exception.UserErrorCode;
 import com.team13.fantree.repository.PostRepository;
 import com.team13.fantree.repository.UserRepository;
 
@@ -42,7 +44,7 @@ public class PostService {
 
     public PostResponseDto findPostById(long id) {
         Post post = postRepository.findById(id).orElseThrow(
-                ()-> new IllegalArgumentException("해당 정보를 찾을수 없습니다.")
+                ()-> new NotFoundException(UserErrorCode.POST_NOT_FOUND)
         );
             return new PostResponseDto(post);
 
@@ -51,7 +53,7 @@ public class PostService {
     @Transactional
     public String updatePost(long id, PostRequestDto requestDto) {
         Post post = postRepository.findById(id).orElseThrow(
-                ()-> new IllegalArgumentException("해당 정보를 찾을수 없습니다.")
+                ()->  new NotFoundException(UserErrorCode.POST_NOT_FOUND)
         );
         post.setContent(requestDto.getContent());
         postRepository.save(post);
@@ -62,7 +64,7 @@ public class PostService {
     @Transactional
     public String deletePost(long id) {
         Post post = postRepository.findById(id).orElseThrow(
-                ()-> new IllegalArgumentException("해당 정보를 찾을수 없습니다.")
+                ()-> new NotFoundException(UserErrorCode.POST_NOT_FOUND)
         );
         postRepository.delete(post);
         return "성공했습니다";
