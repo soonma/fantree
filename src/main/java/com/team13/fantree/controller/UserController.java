@@ -46,7 +46,7 @@ public class UserController {
     }
 
     @PutMapping("/profile/{userId}")
-    public ResponseEntity<String> passwordUpdate(@PathVariable Long userId, @RequestBody PasswordRequestDto requestDto) {
+    public ResponseEntity<String> passwordUpdate(@PathVariable Long userId, @Valid @RequestBody PasswordRequestDto requestDto) {
         userService.passwordUpdate(userId, requestDto);
         return ResponseEntity.ok().body("비밀번호가 변경되었습니다.");
     }
