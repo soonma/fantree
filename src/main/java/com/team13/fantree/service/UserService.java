@@ -54,11 +54,6 @@ public class UserService {
             throw new IllegalArgumentException("현재 비밀번호가 일치하지 않습니다.");
         }
 
-        // 비밀번호 형식이 올바르지 않은 경우
-        if (!isValidPasswordFormat(requestDto.getNewPassword())) {
-            throw new IllegalArgumentException("비밀번호 형식이 올바르지 않습니다.");
-        }
-
         // 현재 비밀번호와 동일한 비밀번호로 수정하는 경우
         if (requestDto.getBeforePassword().equals(requestDto.getNewPassword())) {
             throw new IllegalArgumentException("현재 비밀번호와 동일한 비밀번호로 변경할 수 없습니다.");
