@@ -11,6 +11,8 @@ import com.team13.fantree.exception.DataNotFoundException;
 import com.team13.fantree.dto.SignUpRequestDto;
 import com.team13.fantree.entity.UserStatusEnum;
 
+import com.team13.fantree.exception.NotFoundException;
+import com.team13.fantree.exception.UserErrorCode;
 import com.team13.fantree.repository.UserRepository;
 import jakarta.transaction.Transactional;
 
