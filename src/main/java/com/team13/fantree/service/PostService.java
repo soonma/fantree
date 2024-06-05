@@ -1,11 +1,13 @@
 package com.team13.fantree.service;
 
+
 import com.team13.fantree.dto.PostRequestDto;
 import com.team13.fantree.dto.PostResponseDto;
 import com.team13.fantree.entity.Post;
 import com.team13.fantree.entity.User;
 import com.team13.fantree.repository.PostRepository;
 import com.team13.fantree.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,9 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.team13.fantree.repository.PostRepository;
+
 @Service
 @RequiredArgsConstructor
 public class PostService {
+
     private final PostRepository postRepository;
     //임시 테스트용 UserRepository
     private final UserRepository userRepository;
@@ -80,6 +85,5 @@ public class PostService {
         }
         return postResponseDtos;
     }
-
 
 }
