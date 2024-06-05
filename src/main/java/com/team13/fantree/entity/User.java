@@ -44,15 +44,15 @@ public class User extends Timestamped{
 
     private String statusUpdate;
 
-    public User(SignUpRequestDto requestDto) {
-        this.username = requestDto.getUsername();
-        this.password = requestDto.getPassword();
-        this.name = requestDto.getName();
-        this.email = requestDto.getEmail();
-        this.headline = requestDto.getHeadline();
+    public User(String username, String password, String name, String email, String headline) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.email = email;
+        this.headline = headline;
         this.status = UserStatusEnum.USER;
     }
-      
+
     public void update(ProfileRequestDto requestDto) {
         this.name = requestDto.getName();
         this.email = requestDto.getEmail();
@@ -68,7 +68,6 @@ public class User extends Timestamped{
         this.status = UserStatusEnum.NON_USER;
         this.statusUpdate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
     }
-
 
     public boolean logout() {
         refreshToken = null;

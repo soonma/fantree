@@ -22,7 +22,7 @@ import com.team13.fantree.dto.LoginRequestDto;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     public boolean login(LoginRequestDto requestDto) {
         User findUser = userRepository.findByUsername(requestDto.getUsername()).orElseThrow(
@@ -41,10 +41,11 @@ public class UserService {
 
     public void signup(SignUpRequestDto requestDto){
         String username = requestDto.getUsername();
+        String password = passwordEncoder.encode(requestDto.getPassword());
         if (userRepository.findByUsername(username).isPresent()){
-            throw new IllegalArgumentException("중복된 회원입니다.");
+            throw new MismatchException(UserErrorCode.DUPLICATED_USER);
         }
-        User user = new User(requestDto);
+        User user = new User(username, password, requestDto.getName(), requestDto.getEmail(), requestDto.getHeadline());
         userRepository.save(user);
     }
 
@@ -70,13 +71,13 @@ public class UserService {
     @Transactional
     public void passwordUpdate(Long id, PasswordRequestDto requestDto) {
         User user = findById(id);
-        if (!requestDto.getBeforePassword().equals(user.getPassword())) {
+        if (!passwordEncoder.matches(requestDto.getBeforePassword(), user.getPassword())) {
             throw new MismatchException(UserErrorCode.PASSWORD_MISMATCH);
         }
-        if (requestDto.getBeforePassword().equals(requestDto.getNewPassword())) {
+        if (passwordEncoder.matches(requestDto.getNewPassword(), user.getPassword())) {
             throw new MismatchException(UserErrorCode.PASSWORD_MATCH);
         }
-        user.passwordUpdate(requestDto.getNewPassword());
+        user.passwordUpdate(passwordEncoder.encode(requestDto.getNewPassword()));
     }
 
     public ProfileResponseDto getProfile(Long id) {
