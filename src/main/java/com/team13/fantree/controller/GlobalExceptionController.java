@@ -3,17 +3,12 @@ package com.team13.fantree.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.team13.fantree.exception.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import com.team13.fantree.exception.CommonErrorCode;
-import com.team13.fantree.exception.ErrorCode;
-import com.team13.fantree.exception.ErrorResponse;
-import com.team13.fantree.exception.MismatchException;
-import com.team13.fantree.exception.NotFoundException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,6 +31,12 @@ public class GlobalExceptionController extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(MismatchException.class)
 	public ResponseEntity<Object> handleCustomException(MismatchException e) {
+		ErrorCode errorCode = e.getErrorCode();
+		return handleExceptionInternal(errorCode);
+	}
+
+	@ExceptionHandler(DuplicatedException.class)
+	public ResponseEntity<Object> handleCustomException(DuplicatedException e) {
 		ErrorCode errorCode = e.getErrorCode();
 		return handleExceptionInternal(errorCode);
 	}
