@@ -30,9 +30,9 @@ public class JwtTokenHelper {
     // Header KEY 값
     public static final String AUTHORIZATION_HEADER = "Authorization";
     // Refresh token
-    public static final String REFRESH_TOKEN_HEADER = "refresh_token";
+    public static final String REFRESH_TOKEN_HEADER = "Refresh_token";
     // 사용자 권한 값의 KEY
-    public static final String AUTHORIZATION_KEY = "auth";
+    public static final String AUTHORIZATION_KEY = "status";
     // Token 식별자
     public static final String BEARER_PREFIX = "Bearer ";
     // 토큰 만료시간

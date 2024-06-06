@@ -1,9 +1,11 @@
 package com.team13.fantree.config;
 
 import com.team13.fantree.jwt.JwtTokenHelper;
+import com.team13.fantree.repository.UserRepository;
 import com.team13.fantree.security.JwtAuthenticationFilter;
 import com.team13.fantree.security.JwtAuthorizationFilter;
 import com.team13.fantree.security.UserDetailsServiceImpl;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +17,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -28,11 +30,11 @@ public class WebSecurityConfig {
     private final JwtTokenHelper jwtTokenHelper;
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthenticationConfiguration authenticationConfiguration;
+    private final UserRepository UserRepository;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        //return new BCryptPasswordEncoder();
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -42,14 +44,14 @@ public class WebSecurityConfig {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtTokenHelper);
+        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtTokenHelper,UserRepository);
         filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
         return filter;
     }
 
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
-        return new JwtAuthorizationFilter(jwtTokenHelper, userDetailsService);
+        return new JwtAuthorizationFilter(jwtTokenHelper, userDetailsService,UserRepository);
     }
 
     @Bean
@@ -71,6 +73,8 @@ public class WebSecurityConfig {
                         .requestMatchers("/users/{id}").rememberMe()
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리
         );
+
+
 
         // 필터 관리
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);

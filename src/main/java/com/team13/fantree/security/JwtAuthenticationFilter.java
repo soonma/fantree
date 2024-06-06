@@ -3,8 +3,12 @@ package com.team13.fantree.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team13.fantree.dto.LoginRequestDto;
+import com.team13.fantree.entity.User;
 import com.team13.fantree.entity.UserStatusEnum;
+import com.team13.fantree.exception.MismatchException;
+import com.team13.fantree.exception.UserErrorCode;
 import com.team13.fantree.jwt.JwtTokenHelper;
+import com.team13.fantree.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,9 +23,11 @@ import java.io.IOException;
 @Slf4j(topic = "로그인 및 JWT 생성")
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final JwtTokenHelper jwtTokenHelper;
+    private final UserRepository userRepository;
 
-    public JwtAuthenticationFilter(JwtTokenHelper jwtTokenHelper) {
+    public JwtAuthenticationFilter(JwtTokenHelper jwtTokenHelper, UserRepository userRepository) {
         this.jwtTokenHelper = jwtTokenHelper;
+        this.userRepository = userRepository;
         setFilterProcessesUrl("/login");
     }
 
@@ -29,8 +35,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
             LoginRequestDto requestDto = new ObjectMapper().readValue(request.getInputStream(), LoginRequestDto.class);
-            log.info("requestDto: {}", requestDto.getUsername());
-            log.info("requestDto: {}", requestDto.getPassword());
+            User user = userRepository.findByUsername(requestDto.getUsername()).get();
+
+            if(user.getStatus().equals(UserStatusEnum.NON_USER)) {
+                throw new MismatchException(UserErrorCode.WITHDRAW_USER);
+            }
+
             return getAuthenticationManager().authenticate(
                     new UsernamePasswordAuthenticationToken(
                             requestDto.getUsername(),
@@ -38,6 +48,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                             null
                     )
             );
+
         } catch (IOException e) {
             log.error(e.getMessage());
             throw new RuntimeException(e.getMessage());

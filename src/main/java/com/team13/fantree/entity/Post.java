@@ -28,7 +28,7 @@ public class Post extends Timestamped{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL )
+    @ManyToOne(fetch = FetchType.LAZY )
     @JoinColumn(name ="users_id" ,foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private User user;
 
