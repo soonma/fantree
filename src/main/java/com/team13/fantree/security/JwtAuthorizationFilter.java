@@ -8,6 +8,7 @@ import com.team13.fantree.exception.UserErrorCode;
 import com.team13.fantree.jwt.JwtTokenHelper;
 import com.team13.fantree.repository.UserRepository;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,33 +40,40 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
 
-        String tokenValue = jwtTokenHelper.getJwtFromHeader(req);
+        String accessValue = jwtTokenHelper.getJwtFromHeader(req, JwtTokenHelper.AUTHORIZATION_HEADER);
+        String refreshValue = jwtTokenHelper.getJwtFromHeader(req, JwtTokenHelper.REFRESH_TOKEN_HEADER);
 
-        if (StringUtils.hasText(tokenValue)) {
 
-            if (!jwtTokenHelper.validateToken(tokenValue)) {
-                log.error("Token Error");
-                return;
-            }
-
-            Claims info = jwtTokenHelper.getUserInfoFromToken(tokenValue);
-            User user = userRepository.findByUsername(info.getSubject()).get();
-
-            if(user.getRefreshToken() == null){
-                if(user.getStatus().equals(UserStatusEnum.NON_USER)){
-                    throw new MismatchException(UserErrorCode.WITHDRAW_USER);
-                }
-                throw new MismatchException(UserErrorCode.NOT_LOGIN);
-            }
-
+        if (StringUtils.hasText(accessValue)&&StringUtils.hasText(refreshValue)) {
             try {
-                setAuthentication(info.getSubject());
-            } catch (Exception e) {
-                log.error(e.getMessage());
-                return;
+                if (!jwtTokenHelper.validateToken(accessValue)) {
+                    log.error("Token Error");
+                    return;
+                }
+            } catch (ExpiredJwtException e) {
+                log.error("만료된 토큰입니다");
+                jwtTokenHelper.validateToken(refreshValue);
+                res.sendRedirect("/refresh");
             }
-        }
 
+//            Claims info = jwtTokenHelper.getUserInfoFromToken(accessValue);
+//            User user = userRepository.findByUsername(info.getSubject()).get();
+//
+//            if(user.getRefreshToken() == null){
+//                if(user.getStatus().equals(UserStatusEnum.NON_USER)){
+//                    throw new MismatchException(UserErrorCode.WITHDRAW_USER);
+//                }
+//                throw new MismatchException(UserErrorCode.NOT_LOGIN);
+//            }
+//
+//            try {
+//                setAuthentication(info.getSubject());
+//            } catch (Exception e) {
+//                log.error(e.getMessage());
+//                return;
+//            }
+
+        }
         filterChain.doFilter(req, res);
     }
 

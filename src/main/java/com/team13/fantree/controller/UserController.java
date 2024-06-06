@@ -1,6 +1,9 @@
 package com.team13.fantree.controller;
 
+import com.team13.fantree.entity.UserStatusEnum;
+import com.team13.fantree.jwt.JwtTokenHelper;
 import com.team13.fantree.security.UserDetailsImpl;
+import io.jsonwebtoken.Claims;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +18,14 @@ import com.team13.fantree.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import java.util.concurrent.Callable;
+
 @RequiredArgsConstructor
 @RestController
 public class UserController {
 
     private final UserService userService;
+    private final JwtTokenHelper jwtTokenHelper;
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@Valid @RequestBody LoginRequestDto requestDto) {
@@ -28,7 +34,7 @@ public class UserController {
     }
 
     @PostMapping("/out")
-    public ResponseEntity logout( @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity logout(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         userService.logout(userDetails.getUser().getId());
         return ResponseEntity.ok().body("로그아웃 성공");
     }
@@ -40,13 +46,13 @@ public class UserController {
     }
 
     @DeleteMapping("/users")
-    public ResponseEntity<String> withDraw( @AuthenticationPrincipal UserDetailsImpl userDetails,@RequestParam("password") String password) {
+    public ResponseEntity<String> withDraw(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam("password") String password) {
         userService.withDraw(userDetails.getUser().getId(), password);
         return ResponseEntity.status(201).body("회원탈퇴에 성공했습니다.");
     }
 
     @PatchMapping("/users/{id}")
-    public ResponseEntity<ProfileResponseDto> profileUpdate(@PathVariable Long id, @RequestBody ProfileRequestDto requestDto){
+    public ResponseEntity<ProfileResponseDto> profileUpdate(@PathVariable Long id, @RequestBody ProfileRequestDto requestDto) {
         return ResponseEntity.ok().body(userService.update(id, requestDto));
     }
 
@@ -59,6 +65,24 @@ public class UserController {
     @GetMapping("/users/{id}")
     public ResponseEntity<ProfileResponseDto> getProfile(@PathVariable Long id) {
         return ResponseEntity.ok().body(userService.getProfile(id));
+    }
+
+    @GetMapping("/refresh")
+    public ResponseEntity refresh(
+            @RequestHeader(JwtTokenHelper.AUTHORIZATION_HEADER) String accessToken,
+            @RequestHeader(JwtTokenHelper.REFRESH_TOKEN_HEADER) String refreshToken
+    ) {
+        Claims claims = jwtTokenHelper.getExpiredAccessToken(accessToken);
+        String username = claims.getSubject();
+        String status = claims.get("status").toString();
+        UserStatusEnum statusEnum = UserStatusEnum.valueOf(status);
+
+        userService.refreshTokenCheck(username, refreshToken);
+
+        String newAccessToken = jwtTokenHelper.createToken(username, statusEnum);
+        return ResponseEntity.ok()
+                .header(JwtTokenHelper.AUTHORIZATION_HEADER, newAccessToken)
+                .body("토큰을 재발행 했습니다.  " + newAccessToken);
     }
 
 }
