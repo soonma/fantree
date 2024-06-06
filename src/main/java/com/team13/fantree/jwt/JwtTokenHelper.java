@@ -79,8 +79,8 @@ public class JwtTokenHelper {
     }
 
     // header 에서 JWT 가져오기
-    public String getJwtFromHeader(HttpServletRequest request) {
-        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+    public String getJwtFromHeader(HttpServletRequest request,String tokenHeader) {
+        String bearerToken = request.getHeader(tokenHeader);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
             return bearerToken.substring(7);
         }
@@ -94,8 +94,8 @@ public class JwtTokenHelper {
             return true;
         } catch (SecurityException | MalformedJwtException | SignatureException e) {
             log.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
-        } catch (ExpiredJwtException e) {
-            log.error("Expired JWT token, 만료된 JWT token 입니다.");
+//        } catch (ExpiredJwtException e) {
+//            log.error("Expired JWT token, 만료된 JWT token 입니다.");
         } catch (UnsupportedJwtException e) {
             log.error("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.");
         } catch (IllegalArgumentException e) {
@@ -108,9 +108,19 @@ public class JwtTokenHelper {
     public Claims getUserInfoFromToken(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
+
     @Transactional
     public void saveRefreshToken(String username,String refreshToken) {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException(UserErrorCode.USER_NOT_FOUND));
         user.setRefreshToken(refreshToken);
+    }
+
+    public Claims getExpiredAccessToken(String accessToken) {
+        try {
+            return Jwts.parser().setSigningKey(secretKey)
+                    .parseClaimsJws(accessToken.substring(7)).getBody();
+        } catch (ExpiredJwtException e) {
+            return e.getClaims();
+        }
     }
 }

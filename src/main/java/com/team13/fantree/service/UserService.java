@@ -96,4 +96,13 @@ public class UserService {
         );
     }
 
+    public void refreshTokenCheck(String username, String refreshToken) {
+        User user = userRepository.findByUsername(username).orElseThrow(
+            ()-> new NotFoundException(UserErrorCode.USER_NOT_FOUND)
+        );
+        if (!user.getRefreshToken().equals(refreshToken)) {
+            throw new MismatchException(UserErrorCode.REFRESH_TOKEN_MISMATCH);
+        }
+
+    }
 }
