@@ -67,11 +67,11 @@ public class User extends Timestamped{
     public void withDraw(){
         this.status = UserStatusEnum.NON_USER;
         this.statusUpdate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
+        this.refreshToken = null;
     }
 
-    public boolean logout() {
+    public void logout() {
         refreshToken = null;
-        return refreshToken==null? true: false;
     }
 
 }

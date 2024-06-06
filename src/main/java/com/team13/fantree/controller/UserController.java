@@ -1,6 +1,8 @@
 package com.team13.fantree.controller;
 
+import com.team13.fantree.security.UserDetailsImpl;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import com.team13.fantree.dto.LoginRequestDto;
@@ -25,9 +27,9 @@ public class UserController {
         return ResponseEntity.ok().body("로그인 성공");
     }
 
-    @PutMapping("/logout/{id}")
-    public ResponseEntity logout(@PathVariable Long id) {
-        userService.logout(id);
+    @PostMapping("/out")
+    public ResponseEntity logout( @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        userService.logout(userDetails.getUser().getId());
         return ResponseEntity.ok().body("로그아웃 성공");
     }
 
@@ -37,9 +39,9 @@ public class UserController {
         return ResponseEntity.status(201).body("회원가입에 성공했습니다.");
     }
 
-    @DeleteMapping("/users/{id}")
-    public ResponseEntity<String> withDraw(@PathVariable Long id, String password) {
-        userService.withDraw(id, password);
+    @DeleteMapping("/users")
+    public ResponseEntity<String> withDraw( @AuthenticationPrincipal UserDetailsImpl userDetails,@RequestParam("password") String password) {
+        userService.withDraw(userDetails.getUser().getId(), password);
         return ResponseEntity.status(201).body("회원탈퇴에 성공했습니다.");
     }
 

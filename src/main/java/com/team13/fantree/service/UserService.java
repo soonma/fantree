@@ -13,16 +13,18 @@ import com.team13.fantree.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.team13.fantree.dto.LoginRequestDto;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public boolean login(LoginRequestDto requestDto) {
         User findUser = userRepository.findByUsername(requestDto.getUsername()).orElseThrow(
@@ -34,15 +36,19 @@ public class UserService {
     }
 
     @Transactional
-    public boolean logout(Long id) {
+    public void logout(Long id) {
         User user = findById(id);
-        return user.logout();
+        user.logout();
     }
 
     public void signup(SignUpRequestDto requestDto){
         String username = requestDto.getUsername();
         String password = passwordEncoder.encode(requestDto.getPassword());
+
         if (userRepository.findByUsername(username).isPresent()){
+            if(userRepository.findByUsername(username).get().getStatus().equals(UserStatusEnum.NON_USER)){
+                throw new MismatchException(UserErrorCode.WITHDRAW_USER);
+            }
             throw new MismatchException(UserErrorCode.DUPLICATED_USER);
         }
         User user = new User(username, password, requestDto.getName(), requestDto.getEmail(), requestDto.getHeadline());
@@ -52,8 +58,8 @@ public class UserService {
     @Transactional
     public void withDraw(Long id, String password){
         User user = findById(id);
-        if(!password.equals(user.getPassword())){
-            throw new NotFoundException(UserErrorCode.PW_MISMATCH);
+        if (!passwordEncoder.matches(password,user.getPassword())) {
+            throw new MismatchException(UserErrorCode.PW_MISMATCH);
         }
         if(user.getStatus().equals(UserStatusEnum.NON_USER)){
             throw new NotFoundException(UserErrorCode.WITHDRAW_USER);

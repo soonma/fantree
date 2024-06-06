@@ -5,34 +5,30 @@ import com.team13.fantree.dto.PostRequestDto;
 import com.team13.fantree.dto.PostResponseDto;
 import com.team13.fantree.entity.Post;
 import com.team13.fantree.entity.User;
+import com.team13.fantree.exception.MismatchException;
 import com.team13.fantree.exception.NotFoundException;
 import com.team13.fantree.exception.UserErrorCode;
 import com.team13.fantree.repository.PostRepository;
-import com.team13.fantree.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.team13.fantree.repository.PostRepository;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PostService {
 
     private final PostRepository postRepository;
-    //임시 테스트용 UserRepository
-    private final UserRepository userRepository;
 
 
-    public PostResponseDto createPost(PostRequestDto requestDto) {
-        //임시 테스트  나중에 주석 처리 할 예정
-        User user = userRepository.findById(1L).get();
+    public PostResponseDto createPost(PostRequestDto requestDto, User user) {
         Post post = new Post(requestDto,user);
-
+        log.info("Creating post: {}", post.getUser().getUsername());
         postRepository.save(post);
         return new PostResponseDto(post);
     }
@@ -51,20 +47,26 @@ public class PostService {
     }
 
     @Transactional
-    public String updatePost(long id, PostRequestDto requestDto) {
+    public String updatePost(long id, PostRequestDto requestDto, User user) {
         Post post = postRepository.findById(id).orElseThrow(
                 ()->  new NotFoundException(UserErrorCode.POST_NOT_FOUND)
         );
+        if(post.getUser().getId() != user.getId()) {
+            throw new MismatchException(UserErrorCode.USER_MISMATCH_FOR_POST);
+        }
         post.setContent(requestDto.getContent());
         postRepository.save(post);
         return "저장 성공했습니다.";
     }
 
     @Transactional
-    public String deletePost(long id) {
+    public String deletePost(long id, User user) {
         Post post = postRepository.findById(id).orElseThrow(
                 ()-> new NotFoundException(UserErrorCode.POST_NOT_FOUND)
         );
+        if(post.getUser().getId() != user.getId()) {
+            throw new MismatchException(UserErrorCode.USER_MISMATCH_FOR_POST);
+        }
         postRepository.delete(post);
         return "성공했습니다";
     }

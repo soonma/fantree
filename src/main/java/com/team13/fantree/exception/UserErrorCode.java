@@ -21,7 +21,11 @@ public enum UserErrorCode implements ErrorCode {
 	DUPLICATED_USER(HttpStatus.NOT_FOUND,
 			"중복된 회원입니다."),
   POST_NOT_FOUND(HttpStatus.NOT_FOUND,
-			"게시글의 정보를 찾을수 없습니다.");
+			"게시글의 정보를 찾을수 없습니다."),
+	USER_MISMATCH_FOR_POST(HttpStatus.NOT_FOUND,
+			"작성자가 아닙니다."),
+	NOT_LOGIN(HttpStatus.NOT_FOUND,
+			"로그인 하세요.");
 
 
 	private final HttpStatus httpStatus;

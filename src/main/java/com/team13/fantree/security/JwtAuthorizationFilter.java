@@ -1,7 +1,12 @@
 package com.team13.fantree.security;
 
 
+import com.team13.fantree.entity.User;
+import com.team13.fantree.entity.UserStatusEnum;
+import com.team13.fantree.exception.MismatchException;
+import com.team13.fantree.exception.UserErrorCode;
 import com.team13.fantree.jwt.JwtTokenHelper;
+import com.team13.fantree.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -23,10 +28,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final JwtTokenHelper jwtTokenHelper;
     private final UserDetailsServiceImpl userDetailsService;
+    private final UserRepository userRepository;
 
-    public JwtAuthorizationFilter(JwtTokenHelper jwtTokenHelper, UserDetailsServiceImpl userDetailsService) {
+    public JwtAuthorizationFilter(JwtTokenHelper jwtTokenHelper, UserDetailsServiceImpl userDetailsService , UserRepository userRepository) {
         this.jwtTokenHelper = jwtTokenHelper;
         this.userDetailsService = userDetailsService;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -42,6 +49,14 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             }
 
             Claims info = jwtTokenHelper.getUserInfoFromToken(tokenValue);
+            User user = userRepository.findByUsername(info.getSubject()).get();
+
+            if(user.getRefreshToken() == null){
+                if(user.getStatus().equals(UserStatusEnum.NON_USER)){
+                    throw new MismatchException(UserErrorCode.WITHDRAW_USER);
+                }
+                throw new MismatchException(UserErrorCode.NOT_LOGIN);
+            }
 
             try {
                 setAuthentication(info.getSubject());
