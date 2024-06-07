@@ -34,7 +34,7 @@ public class UserController {
         return ResponseEntity.ok().body("로그아웃 성공");
     }
 
-    @PostMapping("/signup")
+    @PostMapping()
     public ResponseEntity<String> signUp(@Valid @RequestBody SignUpRequestDto requestDto) {
         userService.signup(requestDto);
         return ResponseEntity.status(201).body("회원가입에 성공했습니다.");
