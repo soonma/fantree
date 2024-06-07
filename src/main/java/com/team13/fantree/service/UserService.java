@@ -26,15 +26,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public boolean login(LoginRequestDto requestDto) {
-        User findUser = userRepository.findByUsername(requestDto.getUsername()).orElseThrow(
-                () -> new NotFoundException(UserErrorCode.USER_NOT_FOUND)
-        );
-        if (!findUser.getPassword().equals(requestDto.getPassword()))
-            throw new NotFoundException(UserErrorCode.USER_NOT_FOUND);
-        return true;
-    }
-
     @Transactional
     public void logout(Long id) {
         User user = findById(id);

@@ -51,7 +51,7 @@ public class WebSecurityConfig {
 
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
-        return new JwtAuthorizationFilter(jwtTokenHelper, userDetailsService,UserRepository);
+        return new JwtAuthorizationFilter(jwtTokenHelper, userDetailsService);
     }
 
     @Bean
@@ -67,10 +67,10 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests((authorizeHttpRequests) ->
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
-                        .requestMatchers("/login","/signup","/refresh").permitAll() // 메인 페이지 요청 허가
+                        .requestMatchers("/users/login","/users/signup","/users/refresh", "/error").permitAll() // 메인 페이지 요청 허가
 //                        .requestMatchers(HttpMethod.GET,"/posts").permitAll() // '/api/user/'로 시작하는 요청 모두 접근 허가
                         .requestMatchers(HttpMethod.GET).permitAll() // get요청  접근 허가
-                        .requestMatchers("/users/{id}").rememberMe()
+                        // .requestMatchers("/users/{id}").rememberMe()
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리
         );
 

@@ -22,18 +22,13 @@ import java.util.concurrent.Callable;
 
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
     private final JwtTokenHelper jwtTokenHelper;
 
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody LoginRequestDto requestDto) {
-        userService.login(requestDto);
-        return ResponseEntity.ok().body("로그인 성공");
-    }
-
-    @PostMapping("/out")
+    @PostMapping("/logout")
     public ResponseEntity logout(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         userService.logout(userDetails.getUser().getId());
         return ResponseEntity.ok().body("로그아웃 성공");
@@ -45,24 +40,24 @@ public class UserController {
         return ResponseEntity.status(201).body("회원가입에 성공했습니다.");
     }
 
-    @DeleteMapping("/users")
+    @DeleteMapping()
     public ResponseEntity<String> withDraw(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam("password") String password) {
         userService.withDraw(userDetails.getUser().getId(), password);
         return ResponseEntity.status(201).body("회원탈퇴에 성공했습니다.");
     }
 
-    @PatchMapping("/users/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<ProfileResponseDto> profileUpdate(@PathVariable Long id, @RequestBody ProfileRequestDto requestDto) {
         return ResponseEntity.ok().body(userService.update(id, requestDto));
     }
 
-    @PutMapping("/users/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<String> passwordUpdate(@PathVariable Long id, @Valid @RequestBody PasswordRequestDto requestDto) {
         userService.passwordUpdate(id, requestDto);
         return ResponseEntity.ok().body("비밀번호가 변경되었습니다.");
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ProfileResponseDto> getProfile(@PathVariable Long id) {
         return ResponseEntity.ok().body(userService.getProfile(id));
     }
