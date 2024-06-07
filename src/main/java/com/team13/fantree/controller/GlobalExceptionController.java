@@ -4,10 +4,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.team13.fantree.exception.*;
+import jakarta.validation.ConstraintViolationException;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +47,15 @@ public class GlobalExceptionController extends ResponseEntityExceptionHandler {
 		ErrorCode errorCode = e.getErrorCode();
 		return handleExceptionInternal(errorCode);
 	}
+
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException
+																			  e, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+		log.warn("handleIllegalArgument", e);
+		ErrorCode errorCode = CommonErrorCode.INVALID_PARAMETER;
+		return handleExceptionInternal(e, errorCode);
+	}
+
 
 	private ResponseEntity<Object> handleExceptionInternal(ErrorCode errorCode) {
 		return ResponseEntity.status(errorCode.getHttpStatus())
