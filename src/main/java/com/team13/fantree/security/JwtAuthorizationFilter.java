@@ -1,19 +1,7 @@
 package com.team13.fantree.security;
 
+import java.io.IOException;
 
-import com.team13.fantree.entity.User;
-import com.team13.fantree.entity.UserStatusEnum;
-import com.team13.fantree.exception.MismatchException;
-import com.team13.fantree.exception.UserErrorCode;
-import com.team13.fantree.jwt.JwtTokenHelper;
-import com.team13.fantree.repository.UserRepository;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -22,73 +10,70 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
+import com.team13.fantree.jwt.JwtTokenHelper;
+
+import io.jsonwebtoken.Claims;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j(topic = "JWT 검증 및 인가")
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
-    private final JwtTokenHelper jwtTokenHelper;
-    private final UserDetailsServiceImpl userDetailsService;
-    private final UserRepository userRepository;
+	private final JwtTokenHelper jwtTokenHelper;
+	private final UserDetailsServiceImpl userDetailsService;
 
-    public JwtAuthorizationFilter(JwtTokenHelper jwtTokenHelper, UserDetailsServiceImpl userDetailsService , UserRepository userRepository) {
-        this.jwtTokenHelper = jwtTokenHelper;
-        this.userDetailsService = userDetailsService;
-        this.userRepository = userRepository;
-    }
+	public JwtAuthorizationFilter(JwtTokenHelper jwtTokenHelper, UserDetailsServiceImpl userDetailsService) {
+		this.jwtTokenHelper = jwtTokenHelper;
+		this.userDetailsService = userDetailsService;
+	}
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
+	@Override
+	protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
 
-        String accessValue = jwtTokenHelper.getJwtFromHeader(req, JwtTokenHelper.AUTHORIZATION_HEADER);
-        String refreshValue = jwtTokenHelper.getJwtFromHeader(req, JwtTokenHelper.REFRESH_TOKEN_HEADER);
+		String accessValue = jwtTokenHelper.getJwtFromHeader(req, JwtTokenHelper.AUTHORIZATION_HEADER);
+		String refreshValue = jwtTokenHelper.getJwtFromHeader(req, JwtTokenHelper.REFRESH_TOKEN_HEADER);
 
+		if (StringUtils.hasText(accessValue)) {
+			if (!jwtTokenHelper.validateToken(accessValue)) {
+				log.error("AccessToken Error");
+				return;
+			}
 
-        if (StringUtils.hasText(accessValue)&&StringUtils.hasText(refreshValue)) {
-            try {
-                if (!jwtTokenHelper.validateToken(accessValue)) {
-                    log.error("Token Error");
-                    return;
-                }
-            } catch (ExpiredJwtException e) {
-                log.error("만료된 토큰입니다");
-                jwtTokenHelper.validateToken(refreshValue);
-                res.sendRedirect("/refresh");
-            }
+			if (StringUtils.hasText(refreshValue)) {
+				if (!jwtTokenHelper.validateToken(refreshValue)) {
+					log.error("RefreshToken Error");
+					return;
+				}
+			}
 
-//            Claims info = jwtTokenHelper.getUserInfoFromToken(accessValue);
-//            User user = userRepository.findByUsername(info.getSubject()).get();
-//
-//            if(user.getRefreshToken() == null){
-//                if(user.getStatus().equals(UserStatusEnum.NON_USER)){
-//                    throw new MismatchException(UserErrorCode.WITHDRAW_USER);
-//                }
-//                throw new MismatchException(UserErrorCode.NOT_LOGIN);
-//            }
-//
-//            try {
-//                setAuthentication(info.getSubject());
-//            } catch (Exception e) {
-//                log.error(e.getMessage());
-//                return;
-//            }
+			Claims info = jwtTokenHelper.getUserInfoFromToken(accessValue);
 
-        }
-        filterChain.doFilter(req, res);
-    }
+			try {
+				setAuthentication(info.getSubject());
+			} catch (Exception e) {
+				log.error(e.getMessage());
+				return;
+			}
 
-    // 인증 처리
-    public void setAuthentication(String username) {
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
-        Authentication authentication = createAuthentication(username);
-        context.setAuthentication(authentication);
+		}
+		filterChain.doFilter(req, res);
+	}
 
-        SecurityContextHolder.setContext(context);
-    }
+	// 인증 처리
+	public void setAuthentication(String username) {
+		SecurityContext context = SecurityContextHolder.createEmptyContext();
+		Authentication authentication = createAuthentication(username);
+		context.setAuthentication(authentication);
 
-    // 인증 객체 생성
-    private Authentication createAuthentication(String username) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-    }
+		SecurityContextHolder.setContext(context);
+	}
+
+	// 인증 객체 생성
+	private Authentication createAuthentication(String username) {
+		UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+		return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+	}
 }

@@ -40,6 +40,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             if(user.getStatus().equals(UserStatusEnum.NON_USER)) {
                 throw new MismatchException(UserErrorCode.WITHDRAW_USER);
             }
+            response.setCharacterEncoding("utf-8");
+            response.getWriter().write("상태 : " +response.getStatus()+", 로그인 성공");
 
             return getAuthenticationManager().authenticate(
                     new UsernamePasswordAuthenticationToken(

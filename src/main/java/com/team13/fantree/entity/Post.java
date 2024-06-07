@@ -1,7 +1,10 @@
 package com.team13.fantree.entity;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import com.team13.fantree.dto.PostRequestDto;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
@@ -22,20 +25,21 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Table(name = "post")
-public class Post extends Timestamped{
+public class Post extends Timestamped {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
-    @ManyToOne(fetch = FetchType.LAZY )
-    @JoinColumn(name ="users_id" ,foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private User user;
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "users_id")
+	private User user;
 
-    private String content;
+	private String content;
 
-    public Post(PostRequestDto requestDto, User user) {
-        this.content = requestDto.getContent();
-        this.user = user;
-    }
+	public Post(PostRequestDto requestDto, User user) {
+		this.content = requestDto.getContent();
+		this.user = user;
+	}
 }
