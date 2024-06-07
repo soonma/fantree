@@ -4,13 +4,15 @@ package com.team13.fantree.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
 @Getter
 public class SignUpRequestDto {
-//    @NotBlank
-//    @Pattern(regexp = "\"^[a-zA-Z0-9_-]{10,20}$\"",
-//            message = "ID 형식이 올바르지 않습니다.")
+   // @NotBlank
+   // @Size(min = 10, max = 20)
+   // @Pattern(regexp = "/^[A-Za-z0-9_-]{10,20}$/",
+   //         message = "ID 형식이 올바르지 않습니다.")
     private String username;
 
     @NotBlank
