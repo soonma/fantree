@@ -1,83 +1,82 @@
 package com.team13.fantree.controller;
 
-import com.team13.fantree.entity.UserStatusEnum;
-import com.team13.fantree.jwt.JwtTokenHelper;
-import com.team13.fantree.security.UserDetailsImpl;
-import io.jsonwebtoken.Claims;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.team13.fantree.dto.LoginRequestDto;
-import com.team13.fantree.dto.PasswordRequestDto;
 import com.team13.fantree.dto.ProfileRequestDto;
 import com.team13.fantree.dto.ProfileResponseDto;
 import com.team13.fantree.dto.SignUpRequestDto;
+import com.team13.fantree.entity.UserStatusEnum;
+import com.team13.fantree.jwt.JwtTokenHelper;
+import com.team13.fantree.security.UserDetailsImpl;
 import com.team13.fantree.service.UserService;
 
+import io.jsonwebtoken.Claims;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
-import java.util.concurrent.Callable;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserService userService;
-    private final JwtTokenHelper jwtTokenHelper;
+	private final UserService userService;
+	private final JwtTokenHelper jwtTokenHelper;
 
-    @PostMapping("/logout")
-    public ResponseEntity logout(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        userService.logout(userDetails.getUser().getId());
-        return ResponseEntity.ok().body("로그아웃 성공");
-    }
+	@PostMapping("/logout")
+	public ResponseEntity logout(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		userService.logout(userDetails.getUser().getId());
+		return ResponseEntity.ok().body("로그아웃 성공");
+	}
 
-    @PostMapping("/signup")
-    public ResponseEntity<String> signUp(@Valid @RequestBody SignUpRequestDto requestDto) {
-        userService.signup(requestDto);
-        return ResponseEntity.status(201).body("회원가입에 성공했습니다.");
-    }
+	@PostMapping("/signup")
+	public ResponseEntity<String> signUp(@Valid @RequestBody SignUpRequestDto requestDto) {
+		userService.signup(requestDto);
+		return ResponseEntity.status(201).body("회원가입에 성공했습니다.");
+	}
 
-    @DeleteMapping()
-    public ResponseEntity<String> withDraw(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam("password") String password) {
-        userService.withDraw(userDetails.getUser().getId(), password);
-        return ResponseEntity.status(201).body("회원탈퇴에 성공했습니다.");
-    }
+	@DeleteMapping
+	public ResponseEntity<String> withDraw(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam("password") String password) {
+		userService.withDraw(userDetails.getUser().getId(), password);
+		return ResponseEntity.status(201).body("회원탈퇴에 성공했습니다.");
+	}
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ProfileResponseDto> profileUpdate(@PathVariable Long id, @RequestBody ProfileRequestDto requestDto) {
-        return ResponseEntity.ok().body(userService.update(id, requestDto));
-    }
+	@PatchMapping
+	public ResponseEntity<ProfileResponseDto> profileUpdate(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody ProfileRequestDto requestDto) {
+		String username = userDetails.getUsername();
+		return ResponseEntity.ok().body(userService.update(username, requestDto));
+	}
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<String> passwordUpdate(@PathVariable Long id, @Valid @RequestBody PasswordRequestDto requestDto) {
-        userService.passwordUpdate(id, requestDto);
-        return ResponseEntity.ok().body("비밀번호가 변경되었습니다.");
-    }
+	@GetMapping
+	public ResponseEntity<ProfileResponseDto> getProfile(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		return ResponseEntity.ok().body(userService.getProfile(userDetails.getUsername()));
+	}
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ProfileResponseDto> getProfile(@PathVariable Long id) {
-        return ResponseEntity.ok().body(userService.getProfile(id));
-    }
+	@GetMapping("/refresh")
+	public ResponseEntity refresh(
+		@RequestHeader(JwtTokenHelper.AUTHORIZATION_HEADER) String accessToken,
+		@RequestHeader(JwtTokenHelper.REFRESH_TOKEN_HEADER) String refreshToken
+	) {
+		Claims claims = jwtTokenHelper.getExpiredAccessToken(accessToken);
+		String username = claims.getSubject();
+		String status = claims.get("status").toString();
+		UserStatusEnum statusEnum = UserStatusEnum.valueOf(status);
 
-    @GetMapping("/refresh")
-    public ResponseEntity refresh(
-            @RequestHeader(JwtTokenHelper.AUTHORIZATION_HEADER) String accessToken,
-            @RequestHeader(JwtTokenHelper.REFRESH_TOKEN_HEADER) String refreshToken
-    ) {
-        Claims claims = jwtTokenHelper.getExpiredAccessToken(accessToken);
-        String username = claims.getSubject();
-        String status = claims.get("status").toString();
-        UserStatusEnum statusEnum = UserStatusEnum.valueOf(status);
+		userService.refreshTokenCheck(username, refreshToken);
 
-        userService.refreshTokenCheck(username, refreshToken);
-
-        String newAccessToken = jwtTokenHelper.createToken(username, statusEnum);
-        return ResponseEntity.ok()
-                .header(JwtTokenHelper.AUTHORIZATION_HEADER, newAccessToken)
-                .body("토큰을 재발행 했습니다.  " + newAccessToken);
-    }
+		String newAccessToken = jwtTokenHelper.createToken(username, statusEnum);
+		return ResponseEntity.ok()
+			.header(JwtTokenHelper.AUTHORIZATION_HEADER, newAccessToken)
+			.body("토큰을 재발행 했습니다.  " + newAccessToken);
+	}
 
 }

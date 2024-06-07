@@ -4,10 +4,12 @@ package com.team13.fantree.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
 @Getter
 public class SignUpRequestDto {
+
     @NotBlank
     @Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{10,20}$",
             message = "ID 형식이 올바르지 않습니다.")

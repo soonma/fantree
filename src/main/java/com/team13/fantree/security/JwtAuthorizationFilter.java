@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.team13.fantree.exception.MismatchException;
+import com.team13.fantree.exception.NotFoundException;
 import com.team13.fantree.jwt.JwtTokenHelper;
 
 import io.jsonwebtoken.Claims;
@@ -55,7 +57,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 				setAuthentication(info.getSubject());
 			} catch (Exception e) {
 				log.error(e.getMessage());
-				return;
+				res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				res.setCharacterEncoding("utf-8");
+				res.getWriter().write("상태 : " + res.getStatus() + e.getMessage());
 			}
 
 		}
