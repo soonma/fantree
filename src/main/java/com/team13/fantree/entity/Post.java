@@ -5,11 +5,8 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import com.team13.fantree.dto.PostRequestDto;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;

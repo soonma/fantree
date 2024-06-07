@@ -9,6 +9,7 @@ import lombok.Getter;
 
 @Getter
 public class SignUpRequestDto {
+
     @NotBlank
     @Size(min = 10, max = 20)
     @Pattern(regexp = "[a-zA-z0-9]",
