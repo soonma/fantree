@@ -1,21 +1,11 @@
 ## Variables
-@username = test1234567
-@password = test@1234AAAA
-@name = test
-@email = test@gmail.com
-@headline = test???
+@username = ckehqja
+@password = 1234
 
-### 유정 등록
-POST http://localhost:8080/users
-Content-Type: application/json
+@content = 미래를 예측하는 가장 좋은 방법은 그것을 창조하는 것이다
+@edit_content = %%%%%%%%%%%%%%%%%%
 
-{
-  "username": "{{username}}",
-  "password": "{{password}}",
-  "name": "{{name}}",
-  "email": "{{email}}",
-  "headline": "{{headline}}"
-}
+
 
 ###  로그인
 POST http://localhost:8080/login
@@ -28,18 +18,51 @@ Content-Type: application/json
 
 > {% client.global.set("Authorization", response.headers.valueOf("Authorization")); %}
 
-### 유저 조회
-GET http://localhost:8080/users
-Authorization:{{Authorization}}
 
-### 유저 프로필 수정
-GET http://localhost:8080/auth/customer
-Authorization:{{Authorization}}
 
-### 전체 접근 API
-GET http://localhost:8080/auth/all
-Authorization:{{Authorization}}
 
-### 현재 사용자의 인증정보 확인
-GET http://localhost:8080/user/me
+### 글 작성
+POST http://localhost:8080/posts
 Authorization:{{Authorization}}
+Content-Type: application/json
+
+{
+  "content": "{{content}}"
+}
+
+
+
+### 글 수정
+PUT http://localhost:8080/posts/48
+Authorization:{{Authorization}}
+Content-Type: application/json
+
+{
+  "content": "{{edit_content}}"
+}
+
+
+
+
+
+### 글 조회
+GET http://localhost:8080/posts
+
+
+
+
+
+### 글 조회
+GET http://localhost:8080/posts?page=1
+
+
+
+
+### 글 조회 기간별
+GET http://localhost:8080/posts/period?
+    startDate=2024-06-08&endDate=2024-06-08
+
+
+
+###단권 글 조회
+GET http://localhost:8080/posts/40

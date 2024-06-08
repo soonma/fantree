@@ -23,37 +23,37 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public abstract class Timestamped {
 
 
-    // @CreatedDate
-    // @Column(updatable = false)
-    // @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    // @Temporal(TemporalType.TIMESTAMP)
-    // private LocalDateTime createdAt;
-    //
-    // @LastModifiedDate
-    // @Column
-    // @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    // @Temporal(TemporalType.TIMESTAMP)
-    // private LocalDateTime modifiedAt;
-
     @CreatedDate
     @Column(updatable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.TIMESTAMP)
-    private String createAt;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
     @Column
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.TIMESTAMP)
-    private String modifiedAt;
+    private LocalDateTime modifiedAt;
 
-    @PrePersist
-    public void onPrePersist() {
-        this.createAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
-        this.modifiedAt = this.createAt;
-    }
-
-    @PreUpdate
-    public void onPreUpdate() {
-        this.modifiedAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
-    }
+    // @CreatedDate
+    // @Column(updatable = false)
+    // @Temporal(TemporalType.TIMESTAMP)
+    // private String createAt;
+    //
+    // @LastModifiedDate
+    // @Column
+    // @Temporal(TemporalType.TIMESTAMP)
+    // private String modifiedAt;
+    //
+    // @PrePersist
+    // public void onPrePersist() {
+    //     this.createAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
+    //     this.modifiedAt = this.createAt;
+    // }
+    //
+    // @PreUpdate
+    // public void onPreUpdate() {
+    //     this.modifiedAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
+    // }
 
 }

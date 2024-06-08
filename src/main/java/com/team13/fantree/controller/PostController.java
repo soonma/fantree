@@ -1,9 +1,7 @@
 package com.team13.fantree.controller;
 
-import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -45,23 +43,13 @@ public class PostController {
 		return ResponseEntity.status(200).body(postsDtoList.isEmpty()
 			? "먼저 작성하여 소식을 알려보세요!" : postsDtoList);
 	}
-	//
-	// @GetMapping("/period")
-	// public ResponseEntity findAllPostsByPeriod(
-	// 	@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-	// 	@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-	//
-	// 	List<PostResponseDto> postsDtoList = postService.findAllPostsPeriod(startDate, endDate);
-	//
-	// 	return ResponseEntity.status(200).body(postsDtoList);
-	// }
-	//
-	@GetMapping("/string")
-	public ResponseEntity findAllPostsByPeriodString(
+
+	@GetMapping("/period")
+	public ResponseEntity findAllPostsByPeriod(
 		@RequestParam String startDate,
 		@RequestParam String endDate) {
 
-		List<PostResponseDto> postsDtoList = postService.findAllPostsPeriodString(startDate, endDate);
+		List<PostResponseDto> postsDtoList = postService.findAllPostsPeriod(startDate, endDate);
 
 		return ResponseEntity.status(200).body(postsDtoList);
 	}
@@ -69,11 +57,7 @@ public class PostController {
 	@GetMapping("/{id}")
 	public ResponseEntity findPostById(@PathVariable Long id) {
 		PostResponseDto ResponseDto = postService.findPostById(id);
-		if (ResponseDto == null) {
-			return ResponseEntity.status(404).body("Post not found");
-		} else {
-			return ResponseEntity.status(200).body(ResponseDto);
-		}
+		return ResponseEntity.status(200).body(ResponseDto);
 	}
 
 	@PutMapping("/{id}")

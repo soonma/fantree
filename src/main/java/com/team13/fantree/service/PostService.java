@@ -39,7 +39,7 @@ public class PostService {
 	public List<PostResponseDto> findAllPosts(int page, int size) {
 		PageRequest pageRequest = PageRequest.of(page, size);
 
-		Page<Post> posts = postRepository.findAllByOrderByCreateAtDesc(pageRequest);
+		Page<Post> posts = postRepository.findAllByOrderByCreatedAtDesc(pageRequest);
 		List<PostResponseDto> postsListDto = new ArrayList<>();
 		for (Post post : posts) {
 			PostResponseDto postResponseDto = new PostResponseDto(post);
@@ -90,18 +90,8 @@ public class PostService {
 		return postResponseDtos;
 	}
 
-	// public List<PostResponseDto> findAllPostsPeriod(LocalDate startDate, LocalDate endDate) {
-	// 	List<Post> postList = postRepository.findByCreateAtBetween(startDate, endDate);
-	// 	List<PostResponseDto> postResponseDtos = new ArrayList<>();
-	// 	for (Post post : postList) {
-	// 		PostResponseDto postResponseDto = new PostResponseDto(post);
-	// 		postResponseDtos.add(postResponseDto);
-	// 	}
-	// 	return postResponseDtos;
-	// }
-
-	public List<PostResponseDto> findAllPostsPeriodString(String startDate, String endDate) {
-		List<Post> postList = postRepository.findByCreateAtBetween(startDate, endDate);
+	public List<PostResponseDto> findAllPostsPeriod(String startDate, String endDate) {
+		List<Post> postList = postRepository.findByCustomCondition(startDate, endDate);
 		List<PostResponseDto> postResponseDtos = new ArrayList<>();
 		for (Post post : postList) {
 			PostResponseDto postResponseDto = new PostResponseDto(post);
@@ -109,4 +99,5 @@ public class PostService {
 		}
 		return postResponseDtos;
 	}
+
 }
