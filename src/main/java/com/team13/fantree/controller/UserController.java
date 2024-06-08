@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +24,9 @@ import com.team13.fantree.service.UserService;
 import io.jsonwebtoken.Claims;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/users")
@@ -50,15 +53,18 @@ public class UserController {
 		return ResponseEntity.status(201).body("회원탈퇴에 성공했습니다.");
 	}
 
-	@PatchMapping
+	@PutMapping
 	public ResponseEntity<ProfileResponseDto> profileUpdate(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody ProfileRequestDto requestDto) {
-		String username = userDetails.getUsername();
-		return ResponseEntity.ok().body(userService.update(username, requestDto));
+		Long userId = userDetails.getUser().getId();
+		return ResponseEntity.ok().body(userService.update(userId, requestDto));
 	}
 
 	@GetMapping
-	public ResponseEntity<ProfileResponseDto> getProfile(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		return ResponseEntity.ok().body(userService.getProfile(userDetails.getUsername()));
+	public ResponseEntity<ProfileResponseDto> getProfile(
+		@RequestHeader(JwtTokenHelper.AUTHORIZATION_HEADER) String accessToken,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		log.info(accessToken);
+		return ResponseEntity.ok().body(userService.getProfile(userDetails.getUser().getId()));
 	}
 
 	@GetMapping("/refresh")

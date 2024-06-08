@@ -9,8 +9,8 @@ public class SignUpRequestDto {
 
     @NotBlank
     @Size(min = 10, max = 20)
-    @Pattern(regexp = "[a-zA-z0-9]",
-            message = "ID 형식이 올바르지 않습니다.")
+    @Pattern(regexp = "^[a-zA-Z0-9]+$",
+        message = "ID 형식이 올바르지 않습니다.")
     private String username;
 
     @NotBlank
