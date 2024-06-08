@@ -4,7 +4,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,11 +40,11 @@ public class UserController {
 		return ResponseEntity.ok().body("로그아웃 성공");
 	}
 
-    @PostMapping()
-    public ResponseEntity<String> signUp(@Valid @RequestBody SignUpRequestDto requestDto) {
-        userService.signup(requestDto);
-        return ResponseEntity.status(201).body("회원가입에 성공했습니다.");
-    }
+	@PostMapping()
+	public ResponseEntity<String> signUp(@Valid @RequestBody SignUpRequestDto requestDto) {
+		userService.signup(requestDto);
+		return ResponseEntity.status(201).body("회원가입에 성공했습니다.");
+	}
 
 	@DeleteMapping
 	public ResponseEntity<String> withDraw(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam("password") String password) {

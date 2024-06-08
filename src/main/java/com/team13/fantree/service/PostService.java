@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,4 +90,23 @@ public class PostService {
 		return postResponseDtos;
 	}
 
+	// public List<PostResponseDto> findAllPostsPeriod(LocalDate startDate, LocalDate endDate) {
+	// 	List<Post> postList = postRepository.findByCreateAtBetween(startDate, endDate);
+	// 	List<PostResponseDto> postResponseDtos = new ArrayList<>();
+	// 	for (Post post : postList) {
+	// 		PostResponseDto postResponseDto = new PostResponseDto(post);
+	// 		postResponseDtos.add(postResponseDto);
+	// 	}
+	// 	return postResponseDtos;
+	// }
+
+	public List<PostResponseDto> findAllPostsPeriodString(String startDate, String endDate) {
+		List<Post> postList = postRepository.findByCreateAtBetween(startDate, endDate);
+		List<PostResponseDto> postResponseDtos = new ArrayList<>();
+		for (Post post : postList) {
+			PostResponseDto postResponseDto = new PostResponseDto(post);
+			postResponseDtos.add(postResponseDto);
+		}
+		return postResponseDtos;
+	}
 }
