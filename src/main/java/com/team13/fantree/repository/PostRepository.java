@@ -1,10 +1,11 @@
 package com.team13.fantree.repository;
 
-import com.team13.fantree.entity.Post;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import com.team13.fantree.entity.Post;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
-    List<Post> findAllByOrderByCreateAtDesc();
+	Page<Post> findAllByOrderByCreateAtDesc(Pageable pageable);
 }

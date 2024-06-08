@@ -12,6 +12,8 @@ import com.team13.fantree.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,15 +29,22 @@ public class PostService {
 
 	@Transactional
 	public PostResponseDto createPost(PostRequestDto requestDto, User user) {
-		Post post = new Post(requestDto, user);
+		Post post = new Post(requestDto.getContent() , user);
 		log.info("Creating post: {}", post.getUser().getUsername());
 		postRepository.save(post);
 		return new PostResponseDto(post);
 	}
 
-	public List<PostResponseDto> findAllPosts() {
-		List<Post> posts = postRepository.findAllByOrderByCreateAtDesc();
-		return findContent(posts);
+	public List<PostResponseDto> findAllPosts(int page, int size) {
+		PageRequest pageRequest = PageRequest.of(page, size);
+
+		Page<Post> posts = postRepository.findAllByOrderByCreateAtDesc(pageRequest);
+		List<PostResponseDto> postsListDto = new ArrayList<>();
+		for (Post post : posts) {
+			PostResponseDto postResponseDto = new PostResponseDto(post);
+			postsListDto.add(postResponseDto);
+		}
+		return postsListDto;
 	}
 
 	public PostResponseDto findPostById(long id) {
