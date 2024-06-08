@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class PostService {
 	public List<PostResponseDto> findAllPosts(int page, int size) {
 		PageRequest pageRequest = PageRequest.of(page, size);
 
-		Page<Post> posts = postRepository.findAllByOrderByCreateAtDesc(pageRequest);
+		Page<Post> posts = postRepository.findAllByOrderByCreatedAtDesc(pageRequest);
 		List<PostResponseDto> postsListDto = new ArrayList<>();
 		for (Post post : posts) {
 			PostResponseDto postResponseDto = new PostResponseDto(post);
@@ -83,6 +84,16 @@ public class PostService {
 	public List<PostResponseDto> findContent(List<Post> posts) {
 		List<PostResponseDto> postResponseDtos = new ArrayList<>();
 		for (Post post : posts) {
+			PostResponseDto postResponseDto = new PostResponseDto(post);
+			postResponseDtos.add(postResponseDto);
+		}
+		return postResponseDtos;
+	}
+
+	public List<PostResponseDto> findAllPostsPeriod(String startDate, String endDate) {
+		List<Post> postList = postRepository.findByCustomCondition(startDate, endDate);
+		List<PostResponseDto> postResponseDtos = new ArrayList<>();
+		for (Post post : postList) {
 			PostResponseDto postResponseDto = new PostResponseDto(post);
 			postResponseDtos.add(postResponseDto);
 		}

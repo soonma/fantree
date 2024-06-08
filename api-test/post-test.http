@@ -1,39 +1,68 @@
 ## Variables
-@admin_usernmae = ckehqja
-@admin_password = 1234
+@username = ckehqja
+@password = 1234
 
-### 관리자 계정 등록
-POST http://localhost:8080/accounts?role=admin
-Content-Type: application/json
+@content = 미래를 예측하는 가장 좋은 방법은 그것을 창조하는 것이다
+@edit_content = %%%%%%%%%%%%%%%%%%
 
-{
-  "username": "{{admin_usernmae}}",
-  "password": "{{admin_password}}"
-}
+
 
 ###  로그인
 POST http://localhost:8080/login
 Content-Type: application/json
 
 {
-  "username": "{{admin_usernmae}}",
-  "password": "{{admin_password}}"
+  "username": "{{username}}",
+  "password": "{{password}}"
 }
 
-> {% client.global.set("auth_token", response.body.accessToken); %}
+> {% client.global.set("Authorization", response.headers.valueOf("Authorization")); %}
 
-### 유저 조회
-GET http://localhost:8080/users
-Authorization: {{auth_token}}
 
-### 유저 API
-GET http://localhost:8080/users
-Authorization: Bearer {{auth_token}}
 
-### 전체 접근 API
-GET http://localhost:8080/auth/all
-Authorization: Bearer {{auth_token}}
 
-### 현재 사용자의 인증정보 확인
-GET http://localhost:8080/user/me
-Authorization: Bearer {{auth_token}}
+### 글 작성
+POST http://localhost:8080/posts
+Authorization:{{Authorization}}
+Content-Type: application/json
+
+{
+  "content": "{{content}}"
+}
+
+
+
+### 글 수정
+PUT http://localhost:8080/posts/48
+Authorization:{{Authorization}}
+Content-Type: application/json
+
+{
+  "content": "{{edit_content}}"
+}
+
+
+
+
+
+### 글 조회
+GET http://localhost:8080/posts
+
+
+
+
+
+### 글 조회
+GET http://localhost:8080/posts?page=1
+
+
+
+
+### 글 조회 기간별
+GET http://localhost:8080/posts/period?
+    startDate=2024-06-08&endDate=2024-06-08
+
+
+
+###단권 글 조회
+GET http://localhost:8080/posts/40

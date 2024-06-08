@@ -44,14 +44,20 @@ public class PostController {
 			? "먼저 작성하여 소식을 알려보세요!" : postsDtoList);
 	}
 
+	@GetMapping("/period")
+	public ResponseEntity findAllPostsByPeriod(
+		@RequestParam String startDate,
+		@RequestParam String endDate) {
+
+		List<PostResponseDto> postsDtoList = postService.findAllPostsPeriod(startDate, endDate);
+
+		return ResponseEntity.status(200).body(postsDtoList);
+	}
+
 	@GetMapping("/{id}")
 	public ResponseEntity findPostById(@PathVariable Long id) {
 		PostResponseDto ResponseDto = postService.findPostById(id);
-		if (ResponseDto == null) {
-			return ResponseEntity.status(404).body("Post not found");
-		} else {
-			return ResponseEntity.status(200).body(ResponseDto);
-		}
+		return ResponseEntity.status(200).body(ResponseDto);
 	}
 
 	@PutMapping("/{id}")
