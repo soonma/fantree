@@ -60,9 +60,6 @@ public class User extends Timestamped {
 		if (requestDto.getName() != null) {
 			this.name = requestDto.getName();
 		}
-		if (requestDto.getEmail() != null) {
-			this.email = requestDto.getEmail();
-		}
 		if (requestDto.getHeadline() != null) {
 			this.headline = requestDto.getHeadline();
 		}

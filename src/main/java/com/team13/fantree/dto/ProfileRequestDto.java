@@ -12,6 +12,6 @@ public class ProfileRequestDto {
     private String newPassword;
 
     private String name;
-    private String email;
+    
     private String headline;
 }

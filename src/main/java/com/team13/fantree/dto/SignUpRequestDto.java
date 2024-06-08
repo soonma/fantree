@@ -1,10 +1,7 @@
 package com.team13.fantree.dto;
 
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 
 @Getter
@@ -21,7 +18,10 @@ public class SignUpRequestDto {
     private String password;
 
     private String name;
+
     @Email
+    @NotNull
     private String email;
+
     private String headline;
 }
