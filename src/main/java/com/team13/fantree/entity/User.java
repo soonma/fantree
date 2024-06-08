@@ -66,9 +66,9 @@ public class User extends Timestamped {
 		refreshToken = null;
 	}
 
-	public void update(String name, String email, String headline) {
+	public void update(String name , String headline, String newEncodePw) {
 		this.name = name != null ? name : this.name;
-		this.email = email != null ? email : this.email;
 		this.headline = headline != null ? headline : this.headline;
+		this.password = newEncodePw != null ? newEncodePw : this.password;
 	}
 }
