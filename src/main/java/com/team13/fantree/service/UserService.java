@@ -3,7 +3,6 @@ package com.team13.fantree.service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.team13.fantree.dto.PasswordRequestDto;
 import com.team13.fantree.dto.ProfileRequestDto;
 import com.team13.fantree.dto.ProfileResponseDto;
 import com.team13.fantree.dto.SignUpRequestDto;
@@ -63,12 +62,12 @@ public class UserService {
 		User user = findById(userId);
 		String newEncodePw = null;
 
-		if(requestDto.getPassword() != null) {
+		if (requestDto.getPassword() != null) {
 			if (passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
 				newEncodePw = passwordEncoder.encode(requestDto.getNewPassword());
 			}
 		}
-		user.update(requestDto.getName(), requestDto.getEmail(), requestDto.getHeadline(), newEncodePw);
+		user.update(requestDto.getName(), requestDto.getHeadline(), newEncodePw);
 		return new ProfileResponseDto(user);
 	}
 
