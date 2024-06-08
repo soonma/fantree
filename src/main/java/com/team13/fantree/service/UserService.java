@@ -3,6 +3,7 @@ package com.team13.fantree.service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.team13.fantree.dto.PasswordRequestDto;
 import com.team13.fantree.dto.ProfileRequestDto;
 import com.team13.fantree.dto.ProfileResponseDto;
 import com.team13.fantree.dto.SignUpRequestDto;
@@ -58,27 +59,21 @@ public class UserService {
 	}
 
 	@Transactional
-	public ProfileResponseDto update(String username, ProfileRequestDto requestDto) {
-		User user = userRepository.findByUsername(username).orElseThrow(
-			() -> new NotFoundException(UserErrorCode.USER_NOT_FOUND));
+	public ProfileResponseDto update(Long userId, ProfileRequestDto requestDto) {
+		User user = findById(userId);
 		String newEncodePw = null;
-		if (passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
-			if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
-				throw new MismatchException(UserErrorCode.PASSWORD_MISMATCH);
+
+		if(requestDto.getPassword() != null) {
+			if (passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
+				newEncodePw = passwordEncoder.encode(requestDto.getNewPassword());
 			}
-			if (passwordEncoder.matches(requestDto.getNewPassword(), user.getPassword())) {
-				throw new MismatchException(UserErrorCode.PASSWORD_MATCH);
-			}
-			newEncodePw = passwordEncoder.encode(requestDto.getNewPassword());
 		}
-		user.update(requestDto, newEncodePw);
+		user.update(requestDto.getName(), requestDto.getEmail(), requestDto.getHeadline(), newEncodePw);
 		return new ProfileResponseDto(user);
 	}
 
-	public ProfileResponseDto getProfile(String username) {
-		return new ProfileResponseDto(userRepository.findByUsername(username).orElseThrow(
-			() -> new NotFoundException(UserErrorCode.USER_NOT_FOUND)
-		));
+	public ProfileResponseDto getProfile(Long userId) {
+		return new ProfileResponseDto(findById(userId));
 	}
 
 	public User findById(Long id) {

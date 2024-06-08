@@ -3,8 +3,6 @@ package com.team13.fantree.entity;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import com.team13.fantree.dto.ProfileRequestDto;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -47,6 +46,7 @@ public class User extends Timestamped {
 
 	private String statusUpdate;
 
+	@Builder
 	public User(String username, String password, String name, String email, String headline) {
 		this.username = username;
 		this.password = password;
@@ -54,18 +54,6 @@ public class User extends Timestamped {
 		this.email = email;
 		this.headline = headline;
 		this.status = UserStatusEnum.USER;
-	}
-
-	public void update(ProfileRequestDto requestDto, String newEncodePw) {
-		if (requestDto.getName() != null) {
-			this.name = requestDto.getName();
-		}
-		if (requestDto.getHeadline() != null) {
-			this.headline = requestDto.getHeadline();
-		}
-		if (newEncodePw != null) {
-			this.password = newEncodePw;
-		}
 	}
 
 	public void withDraw() {
@@ -78,4 +66,10 @@ public class User extends Timestamped {
 		refreshToken = null;
 	}
 
+	public void update(String name, String email, String headline, String newEncodePw) {
+		this.name = name != null ? name : this.name;
+		this.email = email != null ? email : this.email;
+		this.headline = headline != null ? headline : this.headline;
+		this.password = newEncodePw != null ? newEncodePw : this.password;
+	}
 }
