@@ -69,11 +69,6 @@ public class User extends Timestamped {
 		if (newEncodePw != null) {
 			this.password = newEncodePw;
 		}
-
-	}
-
-	public void passwordUpdate(String password) {
-		this.password = password;
 	}
 
 	public void withDraw() {
