@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.team13.fantree.dto.ProfileRequestDto;
 import com.team13.fantree.dto.ProfileResponseDto;
 import com.team13.fantree.dto.SignUpRequestDto;
+import com.team13.fantree.dto.WithDrawUserRequestDto;
 import com.team13.fantree.entity.UserStatusEnum;
 import com.team13.fantree.jwt.JwtTokenHelper;
 import com.team13.fantree.security.UserDetailsImpl;
@@ -48,8 +49,9 @@ public class UserController {
     }
 
 	@DeleteMapping
-	public ResponseEntity<String> withDraw(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam("password") String password) {
-		userService.withDraw(userDetails.getUser().getId(), password);
+	public ResponseEntity<String> withDraw(@AuthenticationPrincipal UserDetailsImpl userDetails,
+		@Valid @RequestBody WithDrawUserRequestDto requestDto) {
+		userService.withDraw(userDetails.getUser().getId(), requestDto.getPassword());
 		return ResponseEntity.status(201).body("회원탈퇴에 성공했습니다.");
 	}
 
