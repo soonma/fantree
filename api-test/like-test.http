@@ -1,5 +1,5 @@
 ## Variables
-@username = dltnsah
+@username = ckehqja
 @password = 1234
 
 @content = 미래를 예측하는 가장 좋은 방법은 그것을 창조하는 것이다
@@ -21,7 +21,7 @@ Content-Type: application/json
 
 
 
-### 글 작성
+### 좋아요 작성
 POST http://localhost:8080/posts
 Authorization:{{Authorization}}
 Content-Type: application/json
