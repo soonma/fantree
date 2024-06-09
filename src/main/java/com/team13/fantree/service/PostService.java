@@ -80,23 +80,14 @@ public class PostService {
 		return "성공했습니다";
 	}
 
-	public List<PostResponseDto> findContent(List<Post> posts) {
-		List<PostResponseDto> postResponseDtos = new ArrayList<>();
-		for (Post post : posts) {
-			PostResponseDto postResponseDto = new PostResponseDto(post);
-			postResponseDtos.add(postResponseDto);
-		}
-		return postResponseDtos;
-	}
-
 	public List<PostResponseDto> findAllPostsPeriod(String startDate, String endDate) {
 		List<Post> postList = postRepository.findByCustomCondition(startDate, endDate);
-		List<PostResponseDto> postResponseDtos = new ArrayList<>();
+		List<PostResponseDto> postResponseDtoList = new ArrayList<>();
 		for (Post post : postList) {
 			PostResponseDto postResponseDto = new PostResponseDto(post);
-			postResponseDtos.add(postResponseDto);
+			postResponseDtoList.add(postResponseDto);
 		}
-		return postResponseDtos;
+		return postResponseDtoList;
 	}
 
 }

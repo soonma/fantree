@@ -3,6 +3,8 @@
 // import java.util.Arrays;
 // import java.util.List;
 //
+// import com.team13.fantree.entity.Comment;
+// import com.team13.fantree.repository.CommentRepository;
 // import org.springframework.security.crypto.password.PasswordEncoder;
 // import org.springframework.stereotype.Component;
 // import org.springframework.transaction.annotation.Transactional;
@@ -22,8 +24,9 @@
 // 	private final UserRepository userRepository;
 // 	private final PostRepository postRepository;
 // 	private final PasswordEncoder passwordEncoder;
+//     private final CommentRepository commentRepository;
 //
-// 	@Transactional
+//     @Transactional
 // 	@PostConstruct
 // 	public void init() {
 // 		User user1 = User.builder()
@@ -92,9 +95,17 @@
 // 			("If you can't fly then run, if you can't run then walk, if you can't walk then crawl, but whatever you do you have to keep moving forward."),
 // 			"목표가 없는 사람은 절대로 아무 일도 시작하지 않는다.", ("What you get by achieving your goals is not as important as what you become by achieving your goals.")
 // 		);
+//         List<String> commentList = Arrays.asList(
+//                 "멋진 글이네요!"
+//         );
 //
 // 		for (int i = 0; i < stringList.size(); i++) {
-// 			postRepository.save(new Post(stringList.get(i), userList.get(i % 4)));
+//             Post post = postRepository.save(new Post(stringList.get(i), userList.get(i % 4)));
+//             commentRepository.save(new Comment(post,userList.get(i % 4), commentList.get(0)));
 // 		}
+//
+//
+//
+//
 // 	}
 // }

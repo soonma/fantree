@@ -1,6 +1,5 @@
 package com.team13.fantree.repository;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
