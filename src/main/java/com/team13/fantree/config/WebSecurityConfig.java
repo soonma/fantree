@@ -15,7 +15,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.team13.fantree.jwt.JwtTokenHelper;
-import com.team13.fantree.repository.UserRepository;
 import com.team13.fantree.security.JwtAuthenticationFilter;
 import com.team13.fantree.security.JwtAuthorizationFilter;
 import com.team13.fantree.security.UserDetailsServiceImpl;

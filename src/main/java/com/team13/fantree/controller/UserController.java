@@ -1,5 +1,6 @@
 package com.team13.fantree.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.team13.fantree.dto.ProfileRequestDto;
@@ -34,28 +34,39 @@ public class UserController {
 
 	private final UserService userService;
 	private final JwtTokenHelper jwtTokenHelper;
+	private static final String logoutSuccessMessage = "로그아웃 성공하셨습니다";
+	private static final String withDrawSuccessMessage = "회원탈퇴에 성공했습니다.";
+	private static final String refreshTokenSuccessMessage = "토큰 재밝급 성공했습니다.   ";
 
 	@PostMapping("/logout")
-	public ResponseEntity logout(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+	public ResponseEntity<String> logout(
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+
 		userService.logout(userDetails.getUser().getId());
-		return ResponseEntity.ok().body("로그아웃 성공");
+		return ResponseEntity.ok().body(logoutSuccessMessage);
 	}
 
 	@PostMapping()
-	public ResponseEntity<String> signUp(@Valid @RequestBody SignUpRequestDto requestDto) {
-		userService.signup(requestDto);
-		return ResponseEntity.status(201).body("회원가입에 성공했습니다.");
+	public ResponseEntity<ProfileResponseDto> signUp(@Valid @RequestBody SignUpRequestDto requestDto) {
+
+		ProfileResponseDto user = userService.signup(requestDto);
+		return ResponseEntity.status(HttpStatus.CREATED).body(user);
 	}
 
 	@DeleteMapping
-	public ResponseEntity<String> withDraw(@AuthenticationPrincipal UserDetailsImpl userDetails,
+	public ResponseEntity<String> withDraw(
+		@AuthenticationPrincipal UserDetailsImpl userDetails,
 		@Valid @RequestBody WithDrawUserRequestDto requestDto) {
+
 		userService.withDraw(userDetails.getUser().getId(), requestDto.getPassword());
-		return ResponseEntity.status(201).body("회원탈퇴에 성공했습니다.");
+		return ResponseEntity.ok().body(withDrawSuccessMessage);
 	}
 
 	@PutMapping
-	public ResponseEntity<ProfileResponseDto> profileUpdate(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody ProfileRequestDto requestDto) {
+	public ResponseEntity<ProfileResponseDto> profileUpdate(
+		@AuthenticationPrincipal UserDetailsImpl userDetails, @
+		RequestBody ProfileRequestDto requestDto) {
+
 		Long userId = userDetails.getUser().getId();
 		return ResponseEntity.ok().body(userService.update(userId, requestDto));
 	}
@@ -64,15 +75,17 @@ public class UserController {
 	public ResponseEntity<ProfileResponseDto> getProfile(
 		@RequestHeader(JwtTokenHelper.AUTHORIZATION_HEADER) String accessToken,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+
 		log.info(accessToken);
-		return ResponseEntity.ok().body(userService.getProfile(userDetails.getUser().getId()));
+		return ResponseEntity.ok()
+			.body(userService.getProfile(userDetails.getUser().getId()));
 	}
 
 	@GetMapping("/refresh")
-	public ResponseEntity refresh(
+	public ResponseEntity<String> refresh(
 		@RequestHeader(JwtTokenHelper.AUTHORIZATION_HEADER) String accessToken,
-		@RequestHeader(JwtTokenHelper.REFRESH_TOKEN_HEADER) String refreshToken
-	) {
+		@RequestHeader(JwtTokenHelper.REFRESH_TOKEN_HEADER) String refreshToken) {
+
 		Claims claims = jwtTokenHelper.getExpiredAccessToken(accessToken);
 		String username = claims.getSubject();
 		String status = claims.get("status").toString();
@@ -83,7 +96,6 @@ public class UserController {
 		String newAccessToken = jwtTokenHelper.createToken(username, statusEnum);
 		return ResponseEntity.ok()
 			.header(JwtTokenHelper.AUTHORIZATION_HEADER, newAccessToken)
-			.body("토큰을 재발행 했습니다.  " + newAccessToken);
+			.body(refreshTokenSuccessMessage + newAccessToken);
 	}
-
 }

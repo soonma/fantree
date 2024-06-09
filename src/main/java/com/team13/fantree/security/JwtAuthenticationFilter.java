@@ -10,6 +10,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team13.fantree.dto.LoginRequestDto;
 import com.team13.fantree.entity.UserStatusEnum;
+import com.team13.fantree.exception.CommonErrorCode;
+import com.team13.fantree.exception.NotFoundException;
 import com.team13.fantree.jwt.JwtTokenHelper;
 
 import jakarta.servlet.FilterChain;
@@ -27,12 +29,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	}
 
 	@Override
-	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+	public Authentication attemptAuthentication(HttpServletRequest request,
+		HttpServletResponse response) throws AuthenticationException {
 		try {
-			LoginRequestDto requestDto = new ObjectMapper().readValue(request.getInputStream(), LoginRequestDto.class);
-
-			response.setCharacterEncoding("utf-8");
-			response.getWriter().write("상태 : " + response.getStatus() + ", 로그인 성공");
+			LoginRequestDto requestDto = new ObjectMapper().readValue(
+				request.getInputStream(), LoginRequestDto.class);
 
 			return getAuthenticationManager().authenticate(
 				new UsernamePasswordAuthenticationToken(
@@ -44,12 +45,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 		} catch (IOException e) {
 			log.error(e.getMessage());
-			throw new RuntimeException(e.getMessage());
+			throw new NotFoundException(CommonErrorCode.TOKEN_ERROR);
 		}
 	}
 
 	@Override
-	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) {
+	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+		FilterChain chain, Authentication authResult) throws IOException {
+
 		String username = ((UserDetailsImpl)authResult.getPrincipal()).getUsername();
 		UserStatusEnum status = ((UserDetailsImpl)authResult.getPrincipal()).getUser().getStatus();
 
@@ -62,11 +65,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		response.addHeader(JwtTokenHelper.REFRESH_TOKEN_HEADER, refreshToken);
 		jwtTokenHelper.saveRefreshToken(username, refreshToken);
 
+		response.setCharacterEncoding("utf-8");
+		response.getWriter().write("상태 : " + response.getStatus() + ", 로그인 성공");
+
 	}
 
 	@Override
-	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
-		response.setStatus(401);
-	}
+	protected void unsuccessfulAuthentication(HttpServletRequest request,
+		HttpServletResponse response, AuthenticationException failed) throws IOException {
 
+		response.setStatus(401);
+
+		response.setCharacterEncoding("utf-8");
+		response.getWriter().write("상태 : " + response.getStatus() + ", 로그인 실패");
+	}
 }

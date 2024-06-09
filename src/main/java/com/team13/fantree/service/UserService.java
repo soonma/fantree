@@ -1,5 +1,7 @@
 package com.team13.fantree.service;
 
+import java.util.Optional;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,18 +33,21 @@ public class UserService {
 		user.logout();
 	}
 
-	public void signup(SignUpRequestDto requestDto) {
+	public ProfileResponseDto signup(SignUpRequestDto requestDto) {
 		String username = requestDto.getUsername();
 		String password = passwordEncoder.encode(requestDto.getPassword());
 
-		if (userRepository.findByUsername(username).isPresent()) {
-			if (userRepository.findByUsername(username).get().getStatus().equals(UserStatusEnum.NON_USER)) {
-				throw new MismatchException(UserErrorCode.WITHDRAW_USER);
-			}
-			throw new MismatchException(UserErrorCode.DUPLICATED_USER);
+		User existingUser = userRepository.findByUsername(username)
+			.orElseThrow(() -> new MismatchException(UserErrorCode.USER_NOT_FOUND));
+
+		if (existingUser.getStatus().equals(UserStatusEnum.NON_USER)) {
+			throw new MismatchException(UserErrorCode.WITHDRAW_USER);
 		}
+
 		User user = new User(username, password, requestDto.getName(), requestDto.getEmail(), requestDto.getHeadline());
 		userRepository.save(user);
+
+		return new ProfileResponseDto(user);
 	}
 
 	@Transactional
@@ -67,7 +72,10 @@ public class UserService {
 				newEncodePw = passwordEncoder.encode(requestDto.getNewPassword());
 			}
 		}
-		user.update(requestDto.getName(), requestDto.getHeadline(), newEncodePw);
+		user.update(Optional.ofNullable(requestDto.getName()),
+			Optional.ofNullable(requestDto.getHeadline()),
+			Optional.ofNullable(newEncodePw));
+
 		return new ProfileResponseDto(user);
 	}
 

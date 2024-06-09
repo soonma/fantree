@@ -1,5 +1,13 @@
 package com.team13.fantree.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.team13.fantree.dto.PostRequestDto;
 import com.team13.fantree.dto.PostResponseDto;
 import com.team13.fantree.entity.Post;
@@ -12,15 +20,6 @@ import com.team13.fantree.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -30,7 +29,7 @@ public class PostService {
 
 	@Transactional
 	public PostResponseDto createPost(PostRequestDto requestDto, User user) {
-		Post post = new Post(requestDto.getContent() , user);
+		Post post = new Post(requestDto.getContent(), user);
 		log.info("Creating post: {}", post.getUser().getUsername());
 		postRepository.save(post);
 		return new PostResponseDto(post);
@@ -57,7 +56,7 @@ public class PostService {
 	}
 
 	@Transactional
-	public String updatePost(long id, PostRequestDto requestDto, User user) {
+	public PostResponseDto updatePost(long id, PostRequestDto requestDto, User user) {
 		Post post = postRepository.findById(id).orElseThrow(
 			() -> new NotFoundException(UserErrorCode.POST_NOT_FOUND)
 		);
@@ -66,7 +65,7 @@ public class PostService {
 		}
 		post.setContent(requestDto.getContent());
 		postRepository.save(post);
-		return "저장 성공했습니다.";
+		return new PostResponseDto(post);
 	}
 
 	@Transactional

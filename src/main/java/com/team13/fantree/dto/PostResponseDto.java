@@ -9,12 +9,14 @@ import lombok.Getter;
 
 @Getter
 public class PostResponseDto {
+    private Long id;
     private String username;
     private String content;
     private LocalDateTime createAt;
     private LocalDateTime modifiedAt;
 
     public PostResponseDto(Post post) {
+        this.id = post.getId();
         this.username = post.getUser().getUsername();
         this.content = post.getContent();
         this.createAt = post.getCreatedAt();

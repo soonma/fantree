@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestControllerAdvice
 public class GlobalExceptionController extends ResponseEntityExceptionHandler {
 
-	@ExceptionHandler({Exception.class})
+	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Object> handleAllException(Exception ex) {
 		log.warn("handleAllException", ex);
 		ErrorCode errorCode = CommonErrorCode.INTERNAL_SERVER_ERROR;
