@@ -19,7 +19,6 @@ import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @Table(name = "post")
 public class Post extends Timestamped {
@@ -38,5 +37,8 @@ public class Post extends Timestamped {
 	public Post(String content, User user) {
 		this.content = content;
 		this.user = user;
+	}
+	public void setContent(String content) {
+		this.content = content;
 	}
 }

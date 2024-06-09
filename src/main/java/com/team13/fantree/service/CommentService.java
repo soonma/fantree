@@ -2,23 +2,65 @@ package com.team13.fantree.service;
 
 import com.team13.fantree.dto.CommentRequestDto;
 import com.team13.fantree.dto.CommentResponseDto;
+import com.team13.fantree.entity.Comment;
 import com.team13.fantree.entity.User;
+import com.team13.fantree.exception.CommentErrorCode;
+import com.team13.fantree.exception.MismatchException;
+import com.team13.fantree.exception.NotFoundException;
+import com.team13.fantree.exception.UserErrorCode;
 import com.team13.fantree.repository.CommentRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
 
 
-    public void createComment(CommentRequestDto requestDto, User user) {
-
+    public CommentResponseDto createComment(CommentRequestDto requestDto, User user) {
+        Comment comment = new Comment(requestDto.getContent(), user);
+        log.info("Creating comment {}", comment.getUser().getUsername());
+        commentRepository.save(comment);
+        return new CommentResponseDto(comment);
     }
 
-//    public CommentResponseDto findCommentById(long id) {
-//
-//    }
+    public List<CommentResponseDto> findAllByPosts(long id) {
+        List<Comment> commentList = commentRepository.findAllByPostId(id);
+        List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
+
+        for (Comment comment : commentList) {
+            CommentResponseDto commentResponseDto = new CommentResponseDto(comment);
+            commentResponseDtoList.add(commentResponseDto);
+        }
+        return commentResponseDtoList;
+    }
+
+    @Transactional
+    public CommentResponseDto updateComment(long id, CommentRequestDto requestDto, User user) {
+        Comment comment = commentRepository.findById(id).orElseThrow(() -> new NotFoundException(CommentErrorCode.COMMENT_NOT_FOUND));
+        if (comment.getUser().getId() != user.getId()) {
+            throw new MismatchException(UserErrorCode.USER_MISMATCH_FOR_POST);
+        }
+        comment.setContent(requestDto.getContent());
+        commentRepository.save(comment);
+        return new CommentResponseDto(comment);
+    }
+
+    public String deleteComment(long id, User user) {
+        Comment comment = commentRepository.findById(id).orElseThrow(
+                () -> new NotFoundException(CommentErrorCode.COMMENT_NOT_FOUND)
+        );
+        if (comment.getUser().getId() != user.getId()) {
+            throw new MismatchException(UserErrorCode.USER_MISMATCH_FOR_POST);
+        }
+        commentRepository.delete(comment);
+        return "성공했습니다";
+    }
 }

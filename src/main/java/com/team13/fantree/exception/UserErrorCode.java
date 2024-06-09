@@ -29,7 +29,6 @@ public enum UserErrorCode implements ErrorCode {
 	REFRESH_TOKEN_MISMATCH(HttpStatus.NOT_FOUND,
 			"REFRESH_TOKEN 값이 일치 하지 않습니다.");
 
-
 	private final HttpStatus httpStatus;
 	private final String message;
 }

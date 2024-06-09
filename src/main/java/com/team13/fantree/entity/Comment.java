@@ -39,4 +39,13 @@ public class Comment extends Timestamped{
         this.content = content;
         this.likeCount = likeCount;
     }
+
+    public Comment(String content, User user) {
+        this.content = content;
+        this.user = user;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 }
