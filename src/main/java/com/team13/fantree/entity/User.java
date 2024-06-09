@@ -2,6 +2,7 @@ package com.team13.fantree.entity;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,11 +15,9 @@ import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @Table(name = "users")
 public class User extends Timestamped {
@@ -44,7 +43,7 @@ public class User extends Timestamped {
 
 	private String refreshToken;
 
-	private String statusUpdate;
+	private LocalDateTime statusUpdate;
 
 	@Builder
 	public User(String username, String password, String name, String email, String headline) {
@@ -58,7 +57,7 @@ public class User extends Timestamped {
 
 	public void withDraw() {
 		this.status = UserStatusEnum.NON_USER;
-		this.statusUpdate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
+		this.statusUpdate = this.getModifiedAt();
 		this.refreshToken = null;
 	}
 
@@ -66,9 +65,13 @@ public class User extends Timestamped {
 		refreshToken = null;
 	}
 
-	public void update(String name , String headline, String newEncodePw) {
-		this.name = name != null ? name : this.name;
-		this.headline = headline != null ? headline : this.headline;
-		this.password = newEncodePw != null ? newEncodePw : this.password;
+	public void update(Optional<String> name , Optional<String> headline, Optional<String> newEncodePw) {
+		this.name = name.orElse(this.name);
+		this.headline = headline.orElse(this.headline);
+		this.password = newEncodePw.orElse(this.password);
+	}
+
+	public void saveRefreshToken(String refreshToken) {
+		this.refreshToken = refreshToken;
 	}
 }

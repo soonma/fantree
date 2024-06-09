@@ -2,6 +2,7 @@ package com.team13.fantree.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,49 +27,60 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/posts")
 public class PostController {
 	private final PostService postService;
+	private static final String noPostsMessage = "먼저 작성하여 소식을 알려보세요!";
+	private static final String deletePostSuccessMessage = "게시글이 삭제되었습니다";
 
 	@PostMapping
-	public ResponseEntity createPost(@RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-		postService.createPost(requestDto, userDetails.getUser());
-		return ResponseEntity.ok().body("Post created");
+	public ResponseEntity<PostResponseDto> createPost(
+		@RequestBody PostRequestDto requestDto,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+		PostResponseDto post = postService.createPost(requestDto, userDetails.getUser());
+		return ResponseEntity.status(HttpStatus.CREATED).body(post);
 	}
 
 	@GetMapping
-	public ResponseEntity findAllPosts(
+	public ResponseEntity<Object> findAllPosts(
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "10") int size) {
 
 		List<PostResponseDto> postsDtoList = postService.findAllPosts(page, size);
 
-		return ResponseEntity.status(200).body(postsDtoList.isEmpty()
-			? "먼저 작성하여 소식을 알려보세요!" : postsDtoList);
+		return ResponseEntity.ok().body(postsDtoList.isEmpty()
+			? noPostsMessage : postsDtoList);
 	}
 
 	@GetMapping("/period")
-	public ResponseEntity findAllPostsByPeriod(
+	public ResponseEntity<List<PostResponseDto>> findAllPostsByPeriod(
 		@RequestParam String startDate,
 		@RequestParam String endDate) {
 
 		List<PostResponseDto> postsDtoList = postService.findAllPostsPeriod(startDate, endDate);
 
-		return ResponseEntity.status(200).body(postsDtoList);
+		return ResponseEntity.ok().body(postsDtoList);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity findPostById(@PathVariable Long id) {
-		PostResponseDto ResponseDto = postService.findPostById(id);
-		return ResponseEntity.status(200).body(ResponseDto);
+	public ResponseEntity<PostResponseDto> findPostById(@PathVariable Long id) {
+
+		PostResponseDto responseDto = postService.findPostById(id);
+		return ResponseEntity.ok().body(responseDto);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity updatePost(@PathVariable long id, @RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-		postService.updatePost(id, requestDto, userDetails.getUser());
-		return ResponseEntity.status(200).body("Post updated");
+	public ResponseEntity<PostResponseDto> updatePost(@PathVariable long id,
+		@RequestBody PostRequestDto requestDto,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+		PostResponseDto post = postService.updatePost(id, requestDto, userDetails.getUser());
+		return ResponseEntity.ok().body(post);
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity deletePost(@PathVariable long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+	public ResponseEntity<String> deletePost(@PathVariable long id,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+
 		postService.deletePost(id, userDetails.getUser());
-		return ResponseEntity.status(200).body("Post deleted");
+		return ResponseEntity.ok().body(deletePostSuccessMessage);
 	}
 }

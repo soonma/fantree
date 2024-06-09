@@ -112,7 +112,7 @@ public class JwtTokenHelper {
     @Transactional
     public void saveRefreshToken(String username,String refreshToken) {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException(UserErrorCode.USER_NOT_FOUND));
-        user.setRefreshToken(refreshToken);
+        user.saveRefreshToken(refreshToken);
     }
 
     public Claims getExpiredAccessToken(String accessToken) {
