@@ -1,0 +1,89 @@
+## Variables
+@username = test123456712
+@password = test@1234AAAA
+@name = test
+@email = test@gmail.com2
+@headline = test???
+
+@edit_username = editTestUsername12
+@edit_password = editPassword@@@@@
+@edit_headline = editHeadline2
+
+
+
+
+### 유정 등록
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "{{password}}",
+  "name": "{{name}}",
+  "email": "{{email}}",
+  "headline": "{{headline}}"
+}
+
+
+
+
+###  로그인
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "{{password}}"
+}
+
+> {% client.global.set("Authorization", response.headers.valueOf("Authorization")); %}
+
+
+
+
+### 유저 조회
+GET http://localhost:8080/users
+Authorization:{{Authorization}}
+
+
+
+
+### 유저 프로필 수정
+PUT http://localhost:8080/users
+Authorization:{{Authorization}}
+Content-Type: application/json
+
+{
+  "name": "{{edit_username}}",
+  "headline": "{{edit_headline}}"
+}
+
+
+
+### 유저 프로필 수정 2 password
+PUT http://localhost:8080/users
+Authorization:{{Authorization}}
+Content-Type: application/json
+
+{
+  "password": "{{password}}",
+  "newPassword": "{{edit_password}}"
+}
+
+
+
+
+### 유저 탈퇴
+DELETE http://localhost:8080/users
+Authorization:{{Authorization}}
+Content-Type: application/json
+
+{
+  "password": "{{edit_password}}"
+}
+
+
+
+### 현재 사용자의 인증정보 확인
+GET http://localhost:8080/user/me
+Authorization:{{Authorization}}

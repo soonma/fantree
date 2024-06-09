@@ -1,0 +1,53 @@
+## Variables
+@username = ckehqja
+@password = 1234
+
+@content = 미래를 예측하는 가장 좋은 방법은 그것을 창조하는 것이다
+@edit_content = %%%%%%%%%%%%%%%%%%
+
+
+
+###  로그인
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "{{password}}"
+}
+
+> {% client.global.set("Authorization", response.headers.valueOf("Authorization")); %}
+
+
+
+
+### 댓글 작성
+POST http://localhost:8080/comments
+Authorization:{{Authorization}}
+Content-Type: application/json
+
+{
+  "content": "{{content}}"
+}
+
+
+
+### 댓글 수정
+PUT http://localhost:8080/comments
+Authorization:{{Authorization}}
+Content-Type: application/json
+
+{
+  "content": "{{edit_content}}"
+}
+
+
+### 댓글 삭제
+DELETE http://localhost:8080/comments
+Authorization:{{Authorization}}
+Content-Type: application/json
+
+
+
+### 댓글 조회
+GET http://localhost:8080/comments

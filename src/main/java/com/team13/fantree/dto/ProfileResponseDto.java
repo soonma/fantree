@@ -1,6 +1,5 @@
 package com.team13.fantree.dto;
 
-
 import com.team13.fantree.entity.User;
 import lombok.Getter;
 
@@ -17,4 +16,5 @@ public class ProfileResponseDto {
         this.email = user.getEmail();
         this.headline = user.getHeadline();
     }
+
 }

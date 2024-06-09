@@ -1,51 +1,101 @@
 package com.team13.fantree.controller;
 
-import com.team13.fantree.dto.LoginRequestDto;
-import com.team13.fantree.dto.ProfileRequestDto;
-import com.team13.fantree.dto.SignUpRequestDto;
-import com.team13.fantree.service.UserService;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.team13.fantree.dto.ProfileRequestDto;
+import com.team13.fantree.dto.ProfileResponseDto;
+import com.team13.fantree.dto.SignUpRequestDto;
+import com.team13.fantree.dto.WithDrawUserRequestDto;
+import com.team13.fantree.entity.UserStatusEnum;
+import com.team13.fantree.jwt.JwtTokenHelper;
+import com.team13.fantree.security.UserDetailsImpl;
+import com.team13.fantree.service.UserService;
+
+import io.jsonwebtoken.Claims;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/users")
 public class UserController {
-    private final UserService userService;
 
-    @PostMapping("/signup")
-    public ResponseEntity signUp(@Valid @RequestBody SignUpRequestDto requestDto) {
-        return null;
-    }
+	private final UserService userService;
+	private final JwtTokenHelper jwtTokenHelper;
+	private static final String logoutSuccessMessage = "로그아웃 성공하셨습니다";
+	private static final String withDrawSuccessMessage = "회원탈퇴에 성공했습니다.";
+	private static final String refreshTokenSuccessMessage = "토큰 재밝급 성공했습니다.   ";
 
-    @PostMapping("/login")
-    public ResponseEntity login(@Valid @RequestBody LoginRequestDto requestDto) {
-        return null;
-    }
+	@PostMapping("/logout")
+	public ResponseEntity<String> logout(
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-    @PutMapping("/withDraw/{id}")
-    public ResponseEntity withDraw(@PathVariable Long id) {
-        return null;
-    }
+		userService.logout(userDetails.getUser().getId());
+		return ResponseEntity.ok().body(logoutSuccessMessage);
+	}
 
-    @PutMapping("/logout/{id}")
-    public ResponseEntity logout(@PathVariable Long id) {
-        return null;
-    }
+	@PostMapping()
+	public ResponseEntity<ProfileResponseDto> signUp(@Valid @RequestBody SignUpRequestDto requestDto) {
 
-    @PutMapping("/profile/{id}")
-    public ResponseEntity profileUpdate(@PathVariable Long id, @RequestBody ProfileRequestDto requestDto){
-        return null;
-    }
+		ProfileResponseDto user = userService.signup(requestDto);
+		return ResponseEntity.status(HttpStatus.CREATED).body(user);
+	}
 
-    @GetMapping("/profile/{id}")
-    public ResponseEntity getProfile(@PathVariable Long id) {
-        return null;
-    }
+	@DeleteMapping
+	public ResponseEntity<String> withDraw(
+		@AuthenticationPrincipal UserDetailsImpl userDetails,
+		@Valid @RequestBody WithDrawUserRequestDto requestDto) {
+
+		userService.withDraw(userDetails.getUser().getId(), requestDto.getPassword());
+		return ResponseEntity.ok().body(withDrawSuccessMessage);
+	}
+
+	@PutMapping
+	public ResponseEntity<ProfileResponseDto> profileUpdate(
+		@AuthenticationPrincipal UserDetailsImpl userDetails, @
+		RequestBody ProfileRequestDto requestDto) {
+
+		Long userId = userDetails.getUser().getId();
+		return ResponseEntity.ok().body(userService.update(userId, requestDto));
+	}
+
+	@GetMapping
+	public ResponseEntity<ProfileResponseDto> getProfile(
+		@RequestHeader(JwtTokenHelper.AUTHORIZATION_HEADER) String accessToken,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+		log.info(accessToken);
+		return ResponseEntity.ok()
+			.body(userService.getProfile(userDetails.getUser().getId()));
+	}
+
+	@GetMapping("/refresh")
+	public ResponseEntity<String> refresh(
+		@RequestHeader(JwtTokenHelper.AUTHORIZATION_HEADER) String accessToken,
+		@RequestHeader(JwtTokenHelper.REFRESH_TOKEN_HEADER) String refreshToken) {
+
+		Claims claims = jwtTokenHelper.getExpiredAccessToken(accessToken);
+		String username = claims.getSubject();
+		String status = claims.get("status").toString();
+		UserStatusEnum statusEnum = UserStatusEnum.valueOf(status);
+
+		userService.refreshTokenCheck(username, refreshToken);
+
+		String newAccessToken = jwtTokenHelper.createToken(username, statusEnum);
+		return ResponseEntity.ok()
+			.header(JwtTokenHelper.AUTHORIZATION_HEADER, newAccessToken)
+			.body(refreshTokenSuccessMessage + newAccessToken);
+	}
 }
