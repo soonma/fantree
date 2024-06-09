@@ -3,12 +3,14 @@ package com.team13.fantree.service;
 import com.team13.fantree.dto.CommentRequestDto;
 import com.team13.fantree.dto.CommentResponseDto;
 import com.team13.fantree.entity.Comment;
+import com.team13.fantree.entity.Post;
 import com.team13.fantree.entity.User;
 import com.team13.fantree.exception.CommentErrorCode;
 import com.team13.fantree.exception.MismatchException;
 import com.team13.fantree.exception.NotFoundException;
 import com.team13.fantree.exception.UserErrorCode;
 import com.team13.fantree.repository.CommentRepository;
+import com.team13.fantree.repository.PostRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,10 +24,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
+    private final PostRepository postRepository;
 
 
     public CommentResponseDto createComment(CommentRequestDto requestDto, User user) {
-        Comment comment = new Comment(requestDto.getContent(), user);
+       Post post = postRepository.findById(requestDto.getPostId()).orElseThrow(
+                () -> new NotFoundException(CommentErrorCode.COMMENT_NOT_FOUND));
+        Comment comment = new Comment(post, user, requestDto.getContent());
         log.info("Creating comment {}", comment.getUser().getUsername());
         commentRepository.save(comment);
         return new CommentResponseDto(comment);

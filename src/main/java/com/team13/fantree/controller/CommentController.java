@@ -21,10 +21,10 @@ public class CommentController {
 
     @PostMapping
     public ResponseEntity createComment(
-            @RequestBody CommentRequestDto requestDto,
+            @RequestBody CommentRequestDto commentRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        CommentResponseDto commentResponseDto = commentService.createComment(requestDto, userDetails.getUser());
+        CommentResponseDto commentResponseDto = commentService.createComment(commentRequestDto, userDetails.getUser());
         return ResponseEntity.status(HttpStatus.CREATED).body(commentResponseDto);
     }
 
