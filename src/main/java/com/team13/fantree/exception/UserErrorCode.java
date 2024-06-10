@@ -27,7 +27,11 @@ public enum UserErrorCode implements ErrorCode {
 	NOT_LOGIN(HttpStatus.NOT_FOUND,
 			"로그인 하세요."),
 	REFRESH_TOKEN_MISMATCH(HttpStatus.NOT_FOUND,
-			"REFRESH_TOKEN 값이 일치 하지 않습니다.");
+			"REFRESH_TOKEN 값이 일치 하지 않습니다."),
+	AUTH_NUM_NOTFOUND(HttpStatus.NOT_FOUND,
+			"인증번호가 없습니다 확인부탁드립니다."),
+	AUTH_MISMATCH(HttpStatus.NOT_FOUND,
+			"인증번호가 틀렸습니다. 확인부탁드립니다.");
 
 
 	private final HttpStatus httpStatus;

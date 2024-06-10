@@ -26,6 +26,7 @@ public class UserService {
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final MailSendService mailSendService;
 
 	@Transactional
 	public void logout(Long id) {
@@ -37,15 +38,24 @@ public class UserService {
 		String username = requestDto.getUsername();
 		String password = passwordEncoder.encode(requestDto.getPassword());
 
-		User existingUser = userRepository.findByUsername(username)
-			.orElseThrow(() -> new MismatchException(UserErrorCode.USER_NOT_FOUND));
+		Optional<User> optionalUser = userRepository.findByUsername(username);
 
-		if (existingUser.getStatus().equals(UserStatusEnum.NON_USER)) {
-			throw new MismatchException(UserErrorCode.WITHDRAW_USER);
+		if(optionalUser.isPresent()){
+			if (optionalUser.get().getStatus().equals(UserStatusEnum.NON_USER)) {
+				throw new MismatchException(UserErrorCode.WITHDRAW_USER);
+			}
 		}
 
 		User user = new User(username, password, requestDto.getName(), requestDto.getEmail(), requestDto.getHeadline());
 		userRepository.save(user);
+
+		//가입시 유저 정보를 다시 확인 후 인증 메일 발송
+		user = userRepository.findById(user.getId()).orElseThrow(() -> new NotFoundException(UserErrorCode.USER_NOT_FOUND));
+		mailSendService.joinEmail(user.getEmail());
+
+		log.info("인증 요청 유저 확인 : {}", user.getUsername());
+        log.info("인증 요청 메일 확인 : {}", user.getEmail());
+		log.info("인증 요청 정보 확인 : {}", user.getStatus());
 
 		return new ProfileResponseDto(user);
 	}

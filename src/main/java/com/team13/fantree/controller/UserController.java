@@ -46,7 +46,7 @@ public class UserController {
 		return ResponseEntity.ok().body(logoutSuccessMessage);
 	}
 
-	@PostMapping()
+	@PostMapping
 	public ResponseEntity<ProfileResponseDto> signUp(@Valid @RequestBody SignUpRequestDto requestDto) {
 
 		ProfileResponseDto user = userService.signup(requestDto);
