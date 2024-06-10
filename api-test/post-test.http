@@ -49,22 +49,27 @@ Content-Type: application/json
 
 
 
-### 글 조회
+### 글 조회 - 생성시간
 GET http://localhost:8080/posts
 
 
 
 
 
-### 글 조회
+### 글 조회 - 생성시간
 GET http://localhost:8080/posts?page=1
 
 
 
 
+### 글 조회 - 좋아요 순
+GET http://localhost:8080/posts/likes
+
+
+
 ### 글 조회 기간별
 GET http://localhost:8080/posts/period?
-    startDate=2024-06-08&endDate=2024-06-08
+    startDate=2024-06-08&endDate=2024-06-10
 
 
 

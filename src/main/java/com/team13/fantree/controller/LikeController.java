@@ -39,6 +39,7 @@ public class LikeController {
 	@DeleteMapping("/{likeId}")
 	public ResponseEntity<String> deleteLike(@PathVariable long likeId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+
 		likeService.deleteLike(likeId, userDetails.getUser().getId());
 		return ResponseEntity.ok().body(LIKE_CANCEL);
 	}

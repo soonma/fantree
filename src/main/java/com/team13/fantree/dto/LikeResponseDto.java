@@ -7,10 +7,10 @@ import lombok.Getter;
 
 @Getter
 public class LikeResponseDto {
-	private long id;
-	private long userId;
-	private long contentId;
-	private ContentEnumType contentType;
+	private final long id;
+	private final long userId;
+	private final long contentId;
+	private final ContentEnumType contentType;
 
 	public LikeResponseDto(Like like) {
 		this.id = like.getId();
