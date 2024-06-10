@@ -30,78 +30,212 @@
 // 	@PostConstruct
 // 	public void init() {
 // 		User user1 = User.builder()
-// 			.username("ckehqja")
-// 			.name("차도범")
+// 			.username("MODUtripleSS1")
+// 			.name("윤서연")
 // 			.password(passwordEncoder.encode("1234"))
-// 			.email("ckehqja@gmail.com")
-// 			.headline("열심히 합시다")
+// 			.email("tripleS1@gmail.com")
+// 			.headline("잘 부탁해 WAV")
 // 			.build();
 // 		User user2 = User.builder()
-// 			.username("dltnsah")
-// 			.name("이순모")
+// 			.username("MODUtripleSS2")
+// 			.name("정혜린")
 // 			.password(passwordEncoder.encode("1234"))
-// 			.email("dltnsah@gmail.com")
-// 			.headline("잘부탁드립니다.")
+// 			.email("tripleS2@gmail.com")
+// 			.headline("잘 부탁해 WAV")
 // 			.build();
 // 		User user3 = User.builder()
-// 			.username("dltldud")
-// 			.name("이시영")
+// 			.username("MODUtripleSS3")
+// 			.name("이지우")
 // 			.password(passwordEncoder.encode("1234"))
-// 			.email("dltldud@gmail.com")
-// 			.headline("잘 부탁드려요~!")
+// 			.email("tripleS3@gmail.com")
+// 			.headline("잘 부탁해 WAV")
 // 			.build();
 // 		User user4 = User.builder()
-// 			.username("skagus")
-// 			.name("남현")
+// 			.username("MODUtripleSS4")
+// 			.name("김채연")
 // 			.password(passwordEncoder.encode("1234"))
-// 			.email("skagus@gmail.com")
-// 			.headline("화티잉!")
+// 			.email("tripleS4@gmail.com")
+// 			.headline("잘 부탁해 WAV")
 // 			.build();
+//		 User user5 = User.builder()
+//				 .username("MODUtripleSS5")
+//				 .name("김유연")
+//				 .password(passwordEncoder.encode("1234"))
+//				 .email("tripleS5@gmail.com")
+//				 .headline("잘 부탁해 WAV")
+//				 .build();
+//		 User user6 = User.builder()
+//				 .username("MODUtripleSS6")
+//				 .name("김수민")
+//				 .password(passwordEncoder.encode("1234"))
+//				 .email("tripleS6@gmail.com")
+//				 .headline("잘 부탁해 WAV")
+//				 .build();
+//		 User user7 = User.builder()
+//				 .username("MODUtripleSS7")
+//				 .name("김나경")
+//				 .password(passwordEncoder.encode("1234"))
+//				 .email("tripleS7@gmail.com")
+//				 .headline("잘 부탁해 WAV")
+//				 .build();
+//		 User user8 = User.builder()
+//				 .username("MODUtripleSS8")
+//				 .name("공유빈")
+//				 .password(passwordEncoder.encode("1234"))
+//				 .email("tripleS8@gmail.com")
+//				 .headline("잘 부탁해 WAV")
+//				 .build();
+//		 User user9 = User.builder()
+//				 .username("MODUtripleSS9")
+//				 .name("카에데")
+//				 .password(passwordEncoder.encode("1234"))
+//				 .email("tripleS9@gmail.com")
+//				 .headline("잘 부탁해 WAV")
+//				 .build();
+//		 User user10 = User.builder()
+//				 .username("MODUtripleSS10")
+//				 .name("서다현")
+//				 .password(passwordEncoder.encode("1234"))
+//				 .email("tripleS10@gmail.com")
+//				 .headline("잘 부탁해 WAV")
+//				 .build();
+//		 User user11 = User.builder()
+//				 .username("MODUtripleSS11")
+//				 .name("코토네")
+//				 .password(passwordEncoder.encode("1234"))
+//				 .email("tripleS11@gmail.com")
+//				 .headline("잘 부탁해 WAV")
+//				 .build();
+//		 User user12 = User.builder()
+//				 .username("MODUtripleSS12")
+//				 .name("곽연지")
+//				 .password(passwordEncoder.encode("1234"))
+//				 .email("tripleS12@gmail.com")
+//				 .headline("잘 부탁해 WAV")
+//				 .build();
+//		 User user13 = User.builder()
+//				 .username("MODUtripleSS13")
+//				 .name("니엔")
+//				 .password(passwordEncoder.encode("1234"))
+//				 .email("tripleS13@gmail.com")
+//				 .headline("잘 부탁해 WAV")
+//				 .build();
+//		 User user14 = User.builder()
+//				 .username("MODUtripleSS14")
+//				 .name("박소현")
+//				 .password(passwordEncoder.encode("1234"))
+//				 .email("tripleS14@gmail.com")
+//				 .headline("잘 부탁해 WAV")
+//				 .build();
+//		 User user15 = User.builder()
+//				 .username("MODUtripleSS15")
+//				 .name("신위")
+//				 .password(passwordEncoder.encode("1234"))
+//				 .email("tripleS15@gmail.com")
+//				 .headline("잘 부탁해 WAV")
+//				 .build();
+//		 User user16 = User.builder()
+//				 .username("MODUtripleSS16")
+//				 .name("마유")
+//				 .password(passwordEncoder.encode("1234"))
+//				 .email("tripleS16@gmail.com")
+//				 .headline("잘 부탁해 WAV")
+//				 .build();
+//		 User user17 = User.builder()
+//				 .username("MODUtripleSS17")
+//				 .name("린")
+//				 .password(passwordEncoder.encode("1234"))
+//				 .email("tripleS17@gmail.com")
+//				 .headline("잘 부탁해 WAV")
+//				 .build();
+//		 User user18 = User.builder()
+//				 .username("MODUtripleSS18")
+//				 .name("주빈")
+//				 .password(passwordEncoder.encode("1234"))
+//				 .email("tripleS18@gmail.com")
+//				 .headline("잘 부탁해 WAV")
+//				 .build();
+//		 User user19 = User.builder()
+//				 .username("MODUtripleSS19")
+//				 .name("정하연")
+//				 .password(passwordEncoder.encode("1234"))
+//				 .email("tripleS19@gmail.com")
+//				 .headline("잘 부탁해 WAV")
+//				 .build();
+//		 User user20 = User.builder()
+//				 .username("MODUtripleSS20")
+//				 .name("박시온")
+//				 .password(passwordEncoder.encode("1234"))
+//				 .email("tripleS20@gmail.com")
+//				 .headline("잘 부탁해 WAV")
+//				 .build();
+//		 User user21 = User.builder()
+//				 .username("MODUtripleSS21")
+//				 .name("김채원")
+//				 .password(passwordEncoder.encode("1234"))
+//				 .email("tripleS21@gmail.com")
+//				 .headline("잘 부탁해 WAV")
+//				 .build();
+//		 User user22 = User.builder()
+//				 .username("MODUtripleSS22")
+//				 .name("설린")
+//				 .password(passwordEncoder.encode("1234"))
+//				 .email("tripleS22@gmail.com")
+//				 .headline("잘 부탁해 WAV")
+//				 .build();
+//		 User user23 = User.builder()
+//				 .username("MODUtripleSS23")
+//				 .name("서아")
+//				 .password(passwordEncoder.encode("1234"))
+//				 .email("tripleS23@gmail.com")
+//				 .headline("잘 부탁해 WAV")
+//				 .build();
+//		 User user24 = User.builder()
+//				 .username("MODUtripleSS24")
+//				 .name("지연")
+//				 .password(passwordEncoder.encode("1234"))
+//				 .email("tripleS24@gmail.com")
+//				 .headline("잘 부탁해 WAV")
+//				 .build();
 //
 // 		List<User> userList = Arrays.asList(user1, user2, user3, user4);
 //
 // 		userRepository.saveAll(userList);
 //
 // 		List<String> stringList = Arrays.asList(
-// 			"인생은 모험이거나, 아무것도 아니다.",
-// 			"Life is either a daring adventure or nothing at all.",
-// 			"미래는 꿈의 아름다움을 믿는 사람들의 것이다.",
-// 			"The future belongs to those who believe in the beauty of their dreams.",
-// 			"네가 세상에서 보고 싶은 변화가 되어라",
-// 			"당신의 시간은 한정되어 있습니다. 다른 사람의 삶을 사느라 시간을 낭비하지 마십시오.",
-// 			"Your time is limited, so don't waste it living someone else's life.",
-// 			"윈스턴 처칠 (Winston Churchill):",
-// 			"성공은 최종적인 것이 아니고 실패는 치명적인 것이 아니다. 중요한 것은 계속해 나가는 용기다.",
-// 			"Success is not final, failure is not fatal: It is the courage to continue that counts.",
-// 			"20년 후에는 당신이 하지 않은 일들에 대해 더 후회할 것이다. 그러니 밧줄을 풀고 안전한 항구에서 벗어나 항해를 떠나라. 탐험하고, 꿈꾸고, 발견하라.",
-// 			"Twenty years from now you will be more disappointed by the things you didn’t do than by the ones you did do. So throw off the bowlines. Sail away from the safe harbor. Catch the trade winds in your sails. Explore, Dream, Discover.",
-// 			"가장 큰 실수는 평생 실수를 두려워하는 것이다.", "The greatest mistake you can make in life is to be continually fearing you will make one.",
-// 			"행복은 준비된 사람에게 찾아온다.", "Happiness is not something ready made. It comes from your own actions.",
-// 			"상상력은 지식보다 더 중요하다.", "Imagination is more important than knowledge.",
-// 			"위대한 일은 동기에서 나오지 않고, 집념에서 나온다.", "Doing the best at this moment puts you in the best place for the next moment.",
-// 			"우리는 위대한 일을 할 수 없다. 다만 위대한 사랑으로 작은 일들을 할 수 있을 뿐이다.", ("We can do no great things, only small things with great love."),
-// 			"삶은 자신을 찾는 것이 아니라 자신을 만드는 것이다.", ("Life isn't about finding yourself. Life is about creating yourself."),
-// 			"일반적인 삶은 결코 평범하지 않다.", ("To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment."),
-// 			"내면의 목소리를 따르라. 그것은 네 진정한 자아의 소리다.", ("Go confidently in the direction of your dreams. Live the life you have imagined."),
-// 			"삶은 당신이 다른 계획을 세우느라 바쁠 때 일어나는 일들이다.", ("Life is what happens to you while you're busy making other plans."),
-// 			"살아야 할 이유가 있는 사람은 어떤 어려움도 견딜 수 있다.", ("He who has a why to live can bear almost any how."),
-// 			"중요한 것은 삶의 길이가 아니라 삶의 깊이다.", ("The only way to deal with an unfree world is to become so absolutely free that your very existence is an act of rebellion."),
-// 			"내가 배운 한 가지는 사람들은 당신이 한 말을 잊고, 당신이 한 행동도 잊지만, 당신이 그들에게 어떻게 느끼게 했는지는 절대 잊지 않는다는 것이다.",
-// 			("I've learned that people will forget what you said, people will forget what you did, but people will never forget how you made them feel."),
-// 			"힘든 시기는 오래가지 않지만, 강인한 사람은 오래간다.", ("Tough times never last, but tough people do."),
-// 			"미래를 예측하는 가장 좋은 방법은 그것을 창조하는 것이다.", "The best way to predict your future is to create it.",
-// 			"영혼이 도약할 때, 주저하지 마라.", ("When you are inspired by some great purpose, some extraordinary project, all your thoughts break their bonds."),
-// 			"당신이 비행할 수 없다면 달려라. 달릴 수 없다면 걸어라. 걸을 수 없다면 기어가라. 무엇을 하든 계속 나아가라.",
-// 			("If you can't fly then run, if you can't run then walk, if you can't walk then crawl, but whatever you do you have to keep moving forward."),
-// 			"목표가 없는 사람은 절대로 아무 일도 시작하지 않는다.", ("What you get by achieving your goals is not as important as what you become by achieving your goals.")
+//				 "WAV들 배지전쟁 잘 봤어? 내가 X맨이다~! -윤서연-",
+//				"안뇽! 나는 혜린이얌 우리 앞으로 재밌게 소통하자! -정혜린-",
+//				"아까 채연언니 폰 뺐어서 내가 글 올렸거든 ㅋㅋㅋ 다들 속았어? -이지우-",
+// 			"채연이의 오.노.추 'Knew Better / Forever Boy' - Ariana Grande" ,
+// 			"닭강정 먹음 -김유연-",
+// 			"WAV들 여행갈 때 유연 언니 5명 vs 소현언니 5명 누구랑 갈거야?? -김수민-",
+// 			"오늘 상탔어!!!!!!!! WAV에게 고마운게 너무 많아. 음방 1위해서 라이브하고 팬들과 인사하고 티비에서 나오는 이루고 싶었던 것들 이루게해줘서 고마워 ㅠㅠ-김나경-",
+// 			"유연 언니랑 밥 먹으러 갈건데 점메추 해줄사람? -공유빈-",
+// 			"(배지전쟁) 안봤냐?! -카에데-",
+// 			"웨이브 안녕 나 소다야 웨이브가 있기에 우리 트리플에스가 더더욱 빛날 수 있게 되는 것 같아 나에게 이런 소중한 감정을 알려줘서 정말 고마워 다들 잘자 뿅-서다현-",
+// 			"코토네 네버 다이 -코토네-",
+// 			"연지는_밥_먹는중 냠냠냠 -곽연지-",
+// 			"강아지보다 더 강아지 같은 니엔이다! -니엔-",
+// 			"웨이브 1위 축하해 ! 1위를 할 수 있게 만들어 준 우리 웨이브 진심으로 너무 고마워 이건 너도 함께 받은 상이니까 같이 뿌듯해해줘 -박소현-",
+// 			"안녕하세요 신위에요. 오랜 기다림 끝에 드디어 만났네요! 앞으로 잘 부탁해요>_< -신위-",
+// 			"항상 내 마음이 가는 곳은 웨이브라는걸 잊지 말라줘 이건 시작이고 앞으로도 계속 함께 달려가자!! -마유-",
+// 			"수트 린 어때?-린-",
+// 			"다들 인기가요 샌드위치 먹어봤어? -주빈-",
+// 			"육각단 오늘도 화이팅! 육각! -정하연-",
+// 			"아까 올라온 ASMR 본사람?! -박시온-",
+// 			"한결 자연스러워진 시선 처리-김채원-",
+// 			"WAV들 รักคุณ -설린-",
+// 			"안녕 안녕 안녕하십니까 민족고대 29학번 서아입니다 !! -서아-",
+// 			"WAV와 함께 있다면 이젠 무서울 것 없지! -지연-"
 // 		);
+//
 //         List<String> commentList = Arrays.asList(
-//                 "멋진 글이네요!"
+//                 "진짜 여긴 24명이 다 개그캐인듯"
 //         );
 //
 // 		for (int i = 0; i < stringList.size(); i++) {
-//             Post post = postRepository.save(new Post(stringList.get(i), userList.get(i % 4)));
-//             commentRepository.save(new Comment(post,userList.get(i % 4), commentList.get(0)));
+//             Post post = postRepository.save(new Post(stringList.get(i), userList.get(i % 24)));
+//             commentRepository.save(new Comment(post,userList.get(i % 24), commentList.get(0)));
 // 		}
 //
 //
