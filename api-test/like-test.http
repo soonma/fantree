@@ -1,0 +1,35 @@
+## Variables
+@username = dltnsah
+@password = 1234
+
+@contentId = 5
+@contentType = post
+
+
+
+###  로그인
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "{{password}}"
+}
+
+> {% client.global.set("Authorization", response.headers.valueOf("Authorization")); %}
+
+
+
+
+### 좋아요 작성
+POST http://localhost:8080/likes/{{contentId}}?contentType={{contentType}}
+Authorization:{{Authorization}}
+Content-Type: application/json
+
+
+
+### 좋아요 취소
+DELETE http://localhost:8080/likes/5
+Authorization:{{Authorization}}
+Content-Type: application/json
+
