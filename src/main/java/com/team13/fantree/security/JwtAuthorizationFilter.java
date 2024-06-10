@@ -10,8 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.team13.fantree.exception.MismatchException;
-import com.team13.fantree.exception.NotFoundException;
 import com.team13.fantree.jwt.JwtTokenHelper;
 
 import io.jsonwebtoken.Claims;

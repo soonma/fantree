@@ -3,6 +3,7 @@ package com.team13.fantree.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import com.team13.fantree.exception.ErrorResponse;
 import com.team13.fantree.exception.MismatchException;
 import com.team13.fantree.exception.NotFoundException;
 import com.team13.fantree.exception.SelfLikeException;
+import com.team13.fantree.exception.UserErrorCode;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -56,6 +58,11 @@ public class GlobalExceptionController extends ResponseEntityExceptionHandler {
 	public ResponseEntity<Object> handleCustomException(DuplicateException e) {
 		ErrorCode errorCode = e.getErrorCode();
 		return handleExceptionInternal(errorCode);
+	}
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	public ResponseEntity<Object> handleCustomException(DataIntegrityViolationException e) {
+		ErrorCode errorCode = UserErrorCode.EMAIL_DUPLICATE;
+		return handleExceptionInternal(errorCode, e.getMessage());
 	}
 
 	@Override

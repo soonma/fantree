@@ -1,6 +1,5 @@
 package com.team13.fantree.exception;
 
-
 import java.util.List;
 
 import org.springframework.http.HttpStatus;

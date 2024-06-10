@@ -19,7 +19,6 @@ public enum LikeErrorCode implements ErrorCode {
 	CONTENT_TYPE_MISMATCH(HttpStatus.NOT_ACCEPTABLE,
 		"컨텐츠 타입이 일치하지 않습니다.");
 
-
 	private final HttpStatus httpStatus;
 	private final String message;
 }
