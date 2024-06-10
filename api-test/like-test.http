@@ -1,6 +1,7 @@
 ## Variables
-@username = dltnsah
+@username = MODUtripleSS1
 @password = 1234
+
 
 @contentId = 9
 @contentType_post = post
@@ -37,7 +38,7 @@ Content-Type: application/json
 
 
 ### 좋아요 취소
-DELETE http://localhost:8080/likes/1
+DELETE http://localhost:8080/likes/2
 Authorization:{{Authorization}}
 Content-Type: application/json
 
