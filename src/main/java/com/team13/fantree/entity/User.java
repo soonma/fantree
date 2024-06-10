@@ -52,7 +52,7 @@ public class User extends Timestamped {
 		this.name = name;
 		this.email = email;
 		this.headline = headline;
-		this.status = UserStatusEnum.USER;
+		this.status = UserStatusEnum.NOAUTH_USER;
 	}
 
 	public void withDraw() {
@@ -69,6 +69,11 @@ public class User extends Timestamped {
 		this.name = name.orElse(this.name);
 		this.headline = headline.orElse(this.headline);
 		this.password = newEncodePw.orElse(this.password);
+	}
+
+	public void userStatusUpdate(){
+		this.status = UserStatusEnum.USER;
+		this.statusUpdate = this.getModifiedAt();
 	}
 
 	public void saveRefreshToken(String refreshToken) {

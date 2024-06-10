@@ -43,6 +43,17 @@ dependencies {
     // json
     implementation 'org.json:json:20230227'
 
+    //
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '3.0.5'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'javax.mail:javax.mail-api:1.6.2'
+
+    implementation 'org.springframework.data:spring-data-redis:2.7.5'
+    implementation 'io.lettuce:lettuce-core:6.2.1.RELEASE'
+
+
+    //redis 추가
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
 }
 
