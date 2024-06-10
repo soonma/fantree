@@ -17,10 +17,11 @@ import java.util.List;
 @RequestMapping("/comments")
 public class CommentController {
     private final CommentService commentService;
-    private static final String deletePostSuccessMessage = "댓글이 삭제되었습니다";
+    private static final String DELETE_POST_SUCCESS_MESSAGE = "댓글이 삭제되었습니다";
+
 
     @PostMapping
-    public ResponseEntity createComment(
+    public ResponseEntity<CommentResponseDto> createComment(
             @RequestBody CommentRequestDto commentRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
@@ -44,6 +45,6 @@ public class CommentController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteComment(@PathVariable long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         commentService.deleteComment(id, userDetails.getUser());
-        return ResponseEntity.ok().body(deletePostSuccessMessage);
+        return ResponseEntity.ok().body(DELETE_POST_SUCCESS_MESSAGE);
     }
 }

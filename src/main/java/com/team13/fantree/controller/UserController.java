@@ -34,16 +34,16 @@ public class UserController {
 
 	private final UserService userService;
 	private final JwtTokenHelper jwtTokenHelper;
-	private static final String logoutSuccessMessage = "로그아웃 성공하셨습니다";
-	private static final String withDrawSuccessMessage = "회원탈퇴에 성공했습니다.";
-	private static final String refreshTokenSuccessMessage = "토큰 재밝급 성공했습니다.   ";
+	private static final String LOGOUT_SUCCESS_MESSAGE = "로그아웃 성공하셨습니다";
+	private static final String WITHDRAW_SUCCESS_MESSAGE = "회원탈퇴에 성공했습니다.";
+	private static final String REFRESH_TOKEN_SUCCESS_MESSAGE = "토큰 재발급 성공했습니다.";
 
 	@PostMapping("/logout")
 	public ResponseEntity<String> logout(
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
 		userService.logout(userDetails.getUser().getId());
-		return ResponseEntity.ok().body(logoutSuccessMessage);
+		return ResponseEntity.ok().body(LOGOUT_SUCCESS_MESSAGE);
 	}
 
 	@PostMapping()
@@ -59,13 +59,13 @@ public class UserController {
 		@Valid @RequestBody WithDrawUserRequestDto requestDto) {
 
 		userService.withDraw(userDetails.getUser().getId(), requestDto.getPassword());
-		return ResponseEntity.ok().body(withDrawSuccessMessage);
+		return ResponseEntity.ok().body(WITHDRAW_SUCCESS_MESSAGE);
 	}
 
 	@PutMapping
 	public ResponseEntity<ProfileResponseDto> profileUpdate(
-		@AuthenticationPrincipal UserDetailsImpl userDetails, @
-		RequestBody ProfileRequestDto requestDto) {
+		@AuthenticationPrincipal UserDetailsImpl userDetails,
+		@RequestBody ProfileRequestDto requestDto) {
 
 		Long userId = userDetails.getUser().getId();
 		return ResponseEntity.ok().body(userService.update(userId, requestDto));
@@ -96,6 +96,6 @@ public class UserController {
 		String newAccessToken = jwtTokenHelper.createToken(username, statusEnum);
 		return ResponseEntity.ok()
 			.header(JwtTokenHelper.AUTHORIZATION_HEADER, newAccessToken)
-			.body(refreshTokenSuccessMessage + newAccessToken);
+			.body(REFRESH_TOKEN_SUCCESS_MESSAGE + newAccessToken);
 	}
 }

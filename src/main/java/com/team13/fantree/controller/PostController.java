@@ -27,8 +27,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/posts")
 public class PostController {
 	private final PostService postService;
-	private static final String noPostsMessage = "먼저 작성하여 소식을 알려보세요!";
-	private static final String deletePostSuccessMessage = "게시글이 삭제되었습니다";
+	private static final String NO_POSTS_MESSAGE = "먼저 작성하여 소식을 알려보세요!";
+	private static final String DELETE_POST_SUCCESS_MESSAGE = "게시글이 삭제되었습니다";
 
 	@PostMapping
 	public ResponseEntity<PostResponseDto> createPost(
@@ -47,7 +47,7 @@ public class PostController {
 		List<PostResponseDto> postsDtoList = postService.findAllPosts(page, size);
 
 		return ResponseEntity.ok().body(postsDtoList.isEmpty()
-			? noPostsMessage : postsDtoList);
+			? NO_POSTS_MESSAGE : postsDtoList);
 	}
 
 	@GetMapping("/period")
@@ -81,6 +81,6 @@ public class PostController {
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
 		postService.deletePost(id, userDetails.getUser());
-		return ResponseEntity.ok().body(deletePostSuccessMessage);
+		return ResponseEntity.ok().body(DELETE_POST_SUCCESS_MESSAGE);
 	}
 }
