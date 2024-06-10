@@ -33,10 +33,13 @@ public class Comment extends Timestamped{
 
     private Long likeCount;
 
-    public Comment(Post post, User user, String content, Long likeCount) {
+    public Comment(Post post, User user, String content) {
         this.post = post;
         this.user = user;
         this.content = content;
-        this.likeCount = likeCount;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

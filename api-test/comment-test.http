@@ -21,52 +21,35 @@ Content-Type: application/json
 
 
 
-### 글 작성
-POST http://localhost:8080/posts
+### 댓글 작성
+POST http://localhost:8080/comments
 Authorization:{{Authorization}}
 Content-Type: application/json
 
 {
+  "postId": "2",
   "content": "{{content}}"
 }
 
 
 
-### 글 수정
-PUT http://localhost:8080/posts/48
+### 댓글 수정
+PUT http://localhost:8080/comments/51
 Authorization:{{Authorization}}
 Content-Type: application/json
 
 {
+  "postId": "2",
   "content": "{{edit_content}}"
 }
 
 
-### 글 삭제
-DELETE http://localhost:8080/posts/24
+### 댓글 삭제
+DELETE http://localhost:8080/comments/51
 Authorization:{{Authorization}}
 Content-Type: application/json
 
 
 
-### 글 조회
-GET http://localhost:8080/posts
-
-
-
-
-
-### 글 조회
-GET http://localhost:8080/posts?page=1
-
-
-
-
-### 글 조회 기간별
-GET http://localhost:8080/posts/period?
-    startDate=2024-06-08&endDate=2024-06-08
-
-
-
-###단권 글 조회
-GET http://localhost:8080/posts/40
+### 댓글 조회
+GET http://localhost:8080/comments/2
