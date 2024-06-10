@@ -3,6 +3,7 @@ package com.team13.fantree.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.team13.fantree.exception.PostErrorCode;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -49,7 +50,7 @@ public class PostService {
 
 	public PostResponseDto findPostById(long id) {
 		Post post = postRepository.findById(id).orElseThrow(
-			() -> new NotFoundException(UserErrorCode.POST_NOT_FOUND)
+			() -> new NotFoundException(PostErrorCode.POST_NOT_FOUND)
 		);
 		return new PostResponseDto(post);
 
@@ -58,7 +59,7 @@ public class PostService {
 	@Transactional
 	public PostResponseDto updatePost(long id, PostRequestDto requestDto, User user) {
 		Post post = postRepository.findById(id).orElseThrow(
-			() -> new NotFoundException(UserErrorCode.POST_NOT_FOUND)
+			() -> new NotFoundException(PostErrorCode.POST_NOT_FOUND)
 		);
 		if (post.getUser().getId() != user.getId()) {
 			throw new MismatchException(UserErrorCode.USER_MISMATCH_FOR_POST);
@@ -71,7 +72,7 @@ public class PostService {
 	@Transactional
 	public String deletePost(long id, User user) {
 		Post post = postRepository.findById(id).orElseThrow(
-			() -> new NotFoundException(UserErrorCode.POST_NOT_FOUND)
+			() -> new NotFoundException(PostErrorCode.POST_NOT_FOUND)
 		);
 		if (post.getUser().getId() != user.getId()) {
 			throw new MismatchException(UserErrorCode.USER_MISMATCH_FOR_POST);
