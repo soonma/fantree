@@ -6,6 +6,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Entity
+@Table(name = "likes")
 public class Like extends Timestamped {
 
 	@Id
@@ -29,7 +31,7 @@ public class Like extends Timestamped {
 	@Builder
 	public Like(long userId, long typeId, String type) {
 		this.userId = userId;
-		this.contentType = ContentEnumType.valueOf(type);
+		this.contentType = ContentEnumType.getByType(type);
 		this.contentId = typeId;
 	}
 }

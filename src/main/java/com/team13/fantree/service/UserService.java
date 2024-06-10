@@ -37,9 +37,7 @@ public class UserService {
 		String username = requestDto.getUsername();
 		String password = passwordEncoder.encode(requestDto.getPassword());
 
-		User existingUser = userRepository.findByUsername(username)
-			.orElseThrow(() -> new MismatchException(UserErrorCode.USER_NOT_FOUND));
-
+		User existingUser = userRepository.findByUsername(username).get();
 		if (existingUser.getStatus().equals(UserStatusEnum.NON_USER)) {
 			throw new MismatchException(UserErrorCode.WITHDRAW_USER);
 		}

@@ -1,9 +1,9 @@
 ## Variables
-@username = ckehqja
+@username = dltnsah
 @password = 1234
 
-@content = 미래를 예측하는 가장 좋은 방법은 그것을 창조하는 것이다
-@edit_content = %%%%%%%%%%%%%%%%%%
+@contentId = 5
+@contentType = post
 
 
 
@@ -22,51 +22,14 @@ Content-Type: application/json
 
 
 ### 좋아요 작성
-POST http://localhost:8080/posts
-Authorization:{{Authorization}}
-Content-Type: application/json
-
-{
-  "content": "{{content}}"
-}
-
-
-
-### 글 수정
-PUT http://localhost:8080/posts/48
-Authorization:{{Authorization}}
-Content-Type: application/json
-
-{
-  "content": "{{edit_content}}"
-}
-
-
-### 글 삭제
-DELETE http://localhost:8080/posts/24
+POST http://localhost:8080/likes/{{contentId}}?contentType={{contentType}}
 Authorization:{{Authorization}}
 Content-Type: application/json
 
 
 
-### 글 조회
-GET http://localhost:8080/posts
+### 좋아요 취소
+DELETE http://localhost:8080/likes/5
+Authorization:{{Authorization}}
+Content-Type: application/json
 
-
-
-
-
-### 글 조회
-GET http://localhost:8080/posts?page=1
-
-
-
-
-### 글 조회 기간별
-GET http://localhost:8080/posts/period?
-    startDate=2024-06-08&endDate=2024-06-08
-
-
-
-###단권 글 조회
-GET http://localhost:8080/posts/40

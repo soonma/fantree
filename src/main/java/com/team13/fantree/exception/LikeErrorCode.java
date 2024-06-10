@@ -8,26 +8,16 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum LikeErrorCode implements ErrorCode {
-	USER_NOT_FOUND(HttpStatus.NOT_FOUND,
-		"유저가 없습니다."),
-	PW_MISMATCH(HttpStatus.NOT_FOUND,
-		"유저이름과 비밀번호 불일치"),
-	PASSWORD_MISMATCH(HttpStatus.NOT_FOUND,
-			"현재 비밀번호와 불일치"),
-	PASSWORD_MATCH(HttpStatus.NOT_FOUND,
-			"현재 비밀번호와 일치"),
-	WITHDRAW_USER(HttpStatus.NOT_FOUND,
-			 "이미 탈퇴한 회원입니다."),
-	DUPLICATED_USER(HttpStatus.NOT_FOUND,
-			"중복된 회원입니다."),
-  	POST_NOT_FOUND(HttpStatus.NOT_FOUND,
-			"게시글의 정보를 찾을수 없습니다."),
-	USER_MISMATCH_FOR_POST(HttpStatus.NOT_FOUND,
-			"작성자가 아닙니다."),
-	NOT_LOGIN(HttpStatus.NOT_FOUND,
-			"로그인 하세요."),
-	REFRESH_TOKEN_MISMATCH(HttpStatus.NOT_FOUND,
-			"REFRESH_TOKEN 값이 일치 하지 않습니다.");
+	LIKE_NOT_FOUND(HttpStatus.NOT_FOUND,
+		"좋아요가 없습니다."),
+	SELF_LIKE(HttpStatus.NOT_ACCEPTABLE,
+		"자신의 글/댓글에 좋아요 사용 불가"),
+	DUPLICATE_LIKE(HttpStatus.NOT_ACCEPTABLE,
+		"좋아요는 한번만 가능합니다."),
+	USER_MISMATCH(HttpStatus.NOT_ACCEPTABLE,
+		"유저와 좋아요가 일치하지 않습니다."),
+	CONTENT_TYPE_MISMATCH(HttpStatus.NOT_ACCEPTABLE,
+		"컨텐츠 타입이 일치하지 않습니다.");
 
 
 	private final HttpStatus httpStatus;
