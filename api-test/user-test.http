@@ -1,8 +1,8 @@
 ## Variables
-@username = fltnsah12345
+@username = fltnsah123451
 @password = test@1234AAAA
 @name = 이순모
-@email = clsrn77990@naver.com
+@email = dobam00@naver.com
 @headline = test???
 
 @edit_username = editTestUsername12
@@ -84,13 +84,11 @@ Content-Type: application/json
 
 
 
-### 현재 사용자의 인증정보 확인
-GET http://localhost:8080/user/me
-Authorization:{{Authorization}}
-
 
 ### 인증 유저 변환
 PUT http://localhost:8080/mailableCheck
+Authorization:{{Authorization}}
+Content-Type: application/json
 
 {
   "authNum": "{{authNum}}"

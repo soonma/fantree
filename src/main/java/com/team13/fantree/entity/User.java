@@ -1,7 +1,6 @@
 package com.team13.fantree.entity;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import jakarta.persistence.Column;
@@ -65,13 +64,13 @@ public class User extends Timestamped {
 		refreshToken = null;
 	}
 
-	public void update(Optional<String> name , Optional<String> headline, Optional<String> newEncodePw) {
+	public void update(Optional<String> name, Optional<String> headline, Optional<String> newEncodePw) {
 		this.name = name.orElse(this.name);
 		this.headline = headline.orElse(this.headline);
 		this.password = newEncodePw.orElse(this.password);
 	}
 
-	public void userStatusUpdate(){
+	public void userStatusUpdate() {
 		this.status = UserStatusEnum.USER;
 		this.statusUpdate = this.getModifiedAt();
 	}

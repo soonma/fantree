@@ -2,8 +2,9 @@
 @username = dltnsah
 @password = 1234
 
-@contentId = 5
-@contentType = post
+@contentId = 9
+@contentType_post = post
+@contentType_comment = comment
 
 
 
@@ -21,15 +22,22 @@ Content-Type: application/json
 
 
 
-### 좋아요 작성
-POST http://localhost:8080/likes/{{contentId}}?contentType={{contentType}}
+### 좋아요 작성 - post
+POST http://localhost:8080/likes/{{contentId}}?contentType={{contentType_post}}
+Authorization:{{Authorization}}
+Content-Type: application/json
+
+
+
+### 좋아요 작성 - comment
+POST http://localhost:8080/likes/{{contentId}}?contentType={{contentType_comment}}
 Authorization:{{Authorization}}
 Content-Type: application/json
 
 
 
 ### 좋아요 취소
-DELETE http://localhost:8080/likes/5
+DELETE http://localhost:8080/likes/1
 Authorization:{{Authorization}}
 Content-Type: application/json
 

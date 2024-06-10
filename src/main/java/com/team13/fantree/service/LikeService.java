@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.team13.fantree.dto.LikeResponseDto;
 import com.team13.fantree.entity.Comment;
@@ -31,6 +32,7 @@ public class LikeService {
 	private final CommentRepository commentRepository;
 	private final PostRepository postRepository;
 
+	@Transactional
 	public LikeResponseDto createLike(long userId, long contentId, String contentType) {
 
 		duplicateLikeCheck(userId, contentId, contentType);
@@ -41,7 +43,7 @@ public class LikeService {
 	}
 
 	private void duplicateLikeCheck(long userId, long contentId, String contentType) {
-		Optional<Like> findLike = likeRepository.findByUserId(userId);
+		Optional<Like> findLike = likeRepository.findByUserIdAndContentIdAndContentType(userId, contentId, ContentEnumType.getByType(contentType));
 		if (findLike.isPresent()) {
 			if (findLike.get().getContentId() == contentId &&
 				Objects.equals(findLike.get().getContentType().getType(), contentType)) {
@@ -58,6 +60,7 @@ public class LikeService {
 			);
 			if (comment.getUser().getId() == userId)
 				throw new SelfLikeException(LikeErrorCode.SELF_LIKE);
+			comment.UpLikeCount();
 			//해당 게시글이 존재하지 않으면 예외 발생
 		} else if (Objects.equals(contentType, ContentEnumType.POST.getType())) {
 			Post post = postRepository.findById(contentId).orElseThrow(
@@ -65,6 +68,7 @@ public class LikeService {
 			);
 			if (post.getUser().getId() == userId)
 				throw new SelfLikeException(LikeErrorCode.SELF_LIKE);
+			post.UpLikeCount();
 		} else {
 			throw new NotFoundException(CommonErrorCode.RESOURCE_NOT_FOUND);
 		}

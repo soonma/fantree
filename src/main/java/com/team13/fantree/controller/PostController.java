@@ -1,7 +1,9 @@
 package com.team13.fantree.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -50,12 +52,25 @@ public class PostController {
 			? NO_POSTS_MESSAGE : postsDtoList);
 	}
 
+	@GetMapping("/likes")
+	public ResponseEntity<Object> findAllPostsLikes(
+		@RequestParam(defaultValue = "0") int page,
+		@RequestParam(defaultValue = "10") int size) {
+
+		List<PostResponseDto> postsDtoList = postService.findAllPostsLikes(page, size);
+
+		return ResponseEntity.ok().body(postsDtoList.isEmpty()
+			? NO_POSTS_MESSAGE : postsDtoList);
+	}
+
 	@GetMapping("/period")
 	public ResponseEntity<List<PostResponseDto>> findAllPostsByPeriod(
-		@RequestParam String startDate,
-		@RequestParam String endDate) {
+		@RequestParam  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+		@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)   LocalDate endDate,
+		@RequestParam(defaultValue = "0") int page,
+		@RequestParam(defaultValue = "10") int size) {
 
-		List<PostResponseDto> postsDtoList = postService.findAllPostsPeriod(startDate, endDate);
+		List<PostResponseDto> postsDtoList = postService.findAllPostsPeriod(startDate, endDate, page, size);
 
 		return ResponseEntity.ok().body(postsDtoList);
 	}
