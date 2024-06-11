@@ -2,10 +2,12 @@
 @username = MODUtripleSS1
 @password = 1234
 
-@content = 언제나 당신을 응원해요. 힘내세요!
-@edit_content = edit 언제나 당신을 응원해요. 힘내세요!
 
-@post_id = 24
+@contentId = 9
+@contentType_post = post
+@contentType_comment = comment
+
+
 
 ###  로그인
 POST http://localhost:8080/login
@@ -21,35 +23,22 @@ Content-Type: application/json
 
 
 
-### 댓글 작성
-POST http://localhost:8080/comments
-Authorization:{{Authorization}}
-Content-Type: application/json
-
-{
-  "postId": {{post_id}},
-  "content": "{{content}}"
-}
-
-
-
-### 댓글 수정
-PUT http://localhost:8080/comments/97
-Authorization:{{Authorization}}
-Content-Type: application/json
-
-{
-  "postId": {{post_id}},
-  "content": "{{edit_content}}"
-}
-
-
-### 댓글 삭제
-DELETE http://localhost:8080/comments/97
+### 좋아요 작성 - post
+POST http://localhost:8080/likes/{{contentId}}?contentType={{contentType_post}}
 Authorization:{{Authorization}}
 Content-Type: application/json
 
 
 
-### 댓글 조회
-GET http://localhost:8080/comments/13
+### 좋아요 작성 - comment
+POST http://localhost:8080/likes/{{contentId}}?contentType={{contentType_comment}}
+Authorization:{{Authorization}}
+Content-Type: application/json
+
+
+
+### 좋아요 취소
+DELETE http://localhost:8080/likes/2
+Authorization:{{Authorization}}
+Content-Type: application/json
+

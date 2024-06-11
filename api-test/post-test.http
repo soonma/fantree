@@ -1,9 +1,9 @@
 ## Variables
-@username = ckehqja
+@username = MODUtripleSS1
 @password = 1234
 
-@content = 미래를 예측하는 가장 좋은 방법은 그것을 창조하는 것이다
-@edit_content = %%%%%%%%%%%%%%%%%%
+@content = 밥 먹으러 갈건데 점메추 해줄사람? -공유빈-
+@edit_content = edit 밥 먹으러 갈건데 점메추 해줄사람? -공유빈-
 
 
 
@@ -33,7 +33,7 @@ Content-Type: application/json
 
 
 ### 글 수정
-PUT http://localhost:8080/posts/48
+PUT http://localhost:8080/posts/24
 Authorization:{{Authorization}}
 Content-Type: application/json
 
@@ -43,30 +43,35 @@ Content-Type: application/json
 
 
 ### 글 삭제
-DELETE http://localhost:8080/posts/24
+DELETE http://localhost:8080/posts/25
 Authorization:{{Authorization}}
 Content-Type: application/json
 
 
 
-### 글 조회
+### 글 조회 - 생성시간
 GET http://localhost:8080/posts
 
 
 
 
 
-### 글 조회
+### 글 조회 - 생성시간
 GET http://localhost:8080/posts?page=1
 
 
 
 
+### 글 조회 - 좋아요 순
+GET http://localhost:8080/posts/likes
+
+
+
 ### 글 조회 기간별
 GET http://localhost:8080/posts/period?
-    startDate=2024-06-08&endDate=2024-06-08
+    startDate=2024-06-08&endDate=2024-06-10
 
 
 
 ###단권 글 조회
-GET http://localhost:8080/posts/40
+GET http://localhost:8080/posts/23

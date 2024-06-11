@@ -3,8 +3,6 @@ package com.team13.fantree.entity;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import com.team13.fantree.dto.PostRequestDto;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +13,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter
@@ -34,11 +31,20 @@ public class Post extends Timestamped {
 
 	private String content;
 
+	private Long likeCount;
+
 	public Post(String content, User user) {
 		this.content = content;
 		this.user = user;
+		// this.likeCount = (long) (Math.random()* 1_000_000_000); //좋아요 조작
+		this.likeCount = 0L;
 	}
+
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public void UpLikeCount() {
+		likeCount++;
 	}
 }

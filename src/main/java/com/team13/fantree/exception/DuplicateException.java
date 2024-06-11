@@ -5,6 +5,6 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class SignUpException extends RuntimeException {
+public class DuplicateException extends RuntimeException {
 	private final ErrorCode errorCode;
 }

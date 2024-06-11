@@ -1,15 +1,15 @@
 ## Variables
-@username = test123456712
-@password = test@1234AAAA
-@name = test
-@email = test@gmail.com2
-@headline = test???
+@username = fltnsah1234511
+@password = test@1234AAAA1
+@name = testname
+@email = dobam00@naver.com
+@headline = 화이팅
 
 @edit_username = editTestUsername12
 @edit_password = editPassword@@@@@
 @edit_headline = editHeadline2
 
-
+@authNum = 689235
 
 
 ### 유정 등록
@@ -38,6 +38,17 @@ Content-Type: application/json
 
 > {% client.global.set("Authorization", response.headers.valueOf("Authorization")); %}
 
+
+
+
+### 인증 유저 변환
+PUT http://localhost:8080/mailableCheck
+Authorization:{{Authorization}}
+Content-Type: application/json
+
+{
+  "authNum": "{{authNum}}"
+}
 
 
 
@@ -81,9 +92,3 @@ Content-Type: application/json
 {
   "password": "{{edit_password}}"
 }
-
-
-
-### 현재 사용자의 인증정보 확인
-GET http://localhost:8080/user/me
-Authorization:{{Authorization}}
