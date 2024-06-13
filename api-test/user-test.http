@@ -1,15 +1,15 @@
 ## Variables
-@username = fltnsah1234511
-@password = test@1234AAAA1
-@name = testname
-@email = test@gmail.com
-@headline = 화이팅
+@username = fltnsah12345
+@password = test@1234AAAA
+@name = 이순모
+@email = clsrn77990@naver.com
+@headline = test???
 
-@edit_name = editTestUsername12
+@edit_username = editTestUsername12
 @edit_password = editPassword@@@@@
 @edit_headline = editHeadline2
 
-@authNum = 74569
+@authNum = 96715
 
 
 ### 유정 등록
@@ -66,7 +66,7 @@ Authorization:{{Authorization}}
 Content-Type: application/json
 
 {
-  "name": "{{edit_name}}",
+  "name": "{{edit_username}}",
   "headline": "{{edit_headline}}"
 }
 
@@ -85,41 +85,6 @@ Content-Type: application/json
 
 
 
-
-### 유저 토큰 재발급
-GET http://localhost:8080/users/refresh
-Authorization:{{Authorization}}
-Refresh_token:{{Refresh_token}}
-Content-Type: application/json
-
-
-
-
-
-
-### 유저 로그아웃
-POST http://localhost:8080/users/logout
-Authorization:{{Authorization}}
-Content-Type: application/json
-
-
-
-
-###  로그인
-POST http://localhost:8080/login
-Content-Type: application/json
-
-{
-  "username": "{{username}}",
-  "password": "{{edit_password}}"
-}
-
-> {% client.global.set("Authorization", response.headers.valueOf("Authorization")),
-        client.global.set("Refresh_token", response.headers.valueOf("Refresh_token")); %}
-
-
-
-
 ### 유저 탈퇴
 DELETE http://localhost:8080/users
 Authorization:{{Authorization}}
@@ -127,4 +92,12 @@ Content-Type: application/json
 
 {
   "password": "{{edit_password}}"
+}
+
+
+### 인증 유저 변환
+PUT http://localhost:8080/mailableCheck
+
+{
+  "authNum": "{{authNum}}"
 }

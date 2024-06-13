@@ -48,7 +48,6 @@ public class UserController {
 
 	@PostMapping
 	public ResponseEntity<ProfileResponseDto> signUp(@Valid @RequestBody SignUpRequestDto requestDto) {
-
 		ProfileResponseDto user = userService.signup(requestDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(user);
 	}
