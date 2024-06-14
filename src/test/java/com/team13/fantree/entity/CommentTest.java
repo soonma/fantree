@@ -33,7 +33,7 @@ class CommentTest {
         Comment saveComment = commentRepository.save(comment);
         //then
         assertEquals(saveComment.getUser().getName(),user.getName());
-
+        assertNotNull(saveComment.getId());
     }
 
 
