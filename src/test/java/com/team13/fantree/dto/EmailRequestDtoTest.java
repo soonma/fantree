@@ -24,10 +24,24 @@ class EmailRequestDtoTest {
 
     @Test
     @DisplayName("테스트")
-    void vaildTest() {
+    void emailValidTest() {
         //given
         EmailRequestDto requestDto = new EmailRequestDto();
         requestDto.setEmail("111");
+        //when
+        Set<ConstraintViolation<EmailRequestDto>> result = validator.validate(requestDto);
+        //then
+        for (ConstraintViolation<EmailRequestDto> violation : result) {
+            assertNotNull(violation.getMessage());
+            System.out.println("결과: " +violation.getMessage());
+        }
+    }
+    @Test
+    @DisplayName("테스트2")
+    void emailValidTest2() {
+        //given
+        EmailRequestDto requestDto = new EmailRequestDto();
+        requestDto.setEmail("fltnsah@nate.com");
         //when
         Set<ConstraintViolation<EmailRequestDto>> result = validator.validate(requestDto);
         //then
